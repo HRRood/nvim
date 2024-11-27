@@ -1013,7 +1013,7 @@ require("lazy").setup({
 			--                 :BufferGotoPinned
 			--                 :BufferGotoUnpinned
 			-- Close buffer
-			map("n", "<A-c>", "<Cmd>BufferClose<CR>", opts)
+			map("n", "<leader>bc", "<Cmd>BufferClose<CR>", opts)
 			-- Wipeout buffer
 			--                 :BufferWipeout
 			-- Close commands
