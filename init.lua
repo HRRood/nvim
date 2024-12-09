@@ -102,7 +102,7 @@ vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
-
+vim.opt.wrap = false
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
 
@@ -315,11 +315,13 @@ require("lazy").setup({
 			-- Document existing key chains
 			spec = {
 				{ "<leader>c", group = "[C]ode", mode = { "n", "x" } },
+				{ "<leader>b", group = "[B]uffer", mode = { "n", "x" } },
 				{ "<leader>d", group = "[D]ocument" },
 				{ "<leader>r", group = "[R]ename" },
 				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>w", group = "[W]orkspace" },
 				{ "<leader>t", group = "[T]oggle" },
+				{ "<leader>p", group = "[P]roject" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 			},
 		},
@@ -403,12 +405,13 @@ require("lazy").setup({
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "[P]roject [F]ind file" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
+			vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "[P]roject [S]earch" })
 			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
+			vim.keymap.set("n", "<leader>pr", builtin.resume, { desc = "[P]roject search [R]esume" })
+			vim.keymap.set("n", "<leader>sr", ":%s//<Left>", { desc = "[S]earch [R]eplace" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
@@ -991,8 +994,8 @@ require("lazy").setup({
 			local opts = { noremap = true, silent = true }
 
 			-- Move to previous/next
-			map("n", "<leader.,", "<Cmd>BufferPrevious<CR>", opts)
-			map("n", "<leader>.", "<Cmd>BufferNext<CR>", opts)
+			map("n", "<A-,>", "<Cmd>BufferPrevious<CR>", opts)
+			map("n", "<A-.>", "<Cmd>BufferNext<CR>", opts)
 			-- Re-order to previous/next
 			map("n", "<A-<>", "<Cmd>BufferMovePrevious<CR>", opts)
 			map("n", "<A->>", "<Cmd>BufferMoveNext<CR>", opts)
@@ -1013,7 +1016,7 @@ require("lazy").setup({
 			--                 :BufferGotoPinned
 			--                 :BufferGotoUnpinned
 			-- Close buffer
-			map("n", "<A-c>", "<Cmd>BufferClose<CR>", opts)
+			map("n", "<leader>bc", "<Cmd>BufferClose<CR>", { noremap = true, silent = true })
 			-- Wipeout buffer
 			--                 :BufferWipeout
 			-- Close commands
