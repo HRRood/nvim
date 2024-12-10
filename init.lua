@@ -31,8 +31,6 @@ vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
 
 vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
 vim.opt.timeoutlen = 300
 
@@ -74,6 +72,11 @@ vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
+
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move window left", noremap = true, silent = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move window down", noremap = true, silent = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move window up", noremap = true, silent = true })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move window right", noremap = true, silent = true })
 
 -- Add keybinds to move cursor in insert mode
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Go to explorer" })
@@ -277,6 +280,10 @@ require("lazy").setup({
 				--   },
 				-- },
 				-- pickers = {}
+				defaults = {
+					prompt_prefix = " ",
+					selection_caret = " ",
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -793,10 +800,6 @@ require("lazy").setup({
 			auto_install = true,
 			highlight = {
 				enable = true,
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
 			},
 			indent = { enable = true, disable = { "ruby" } },
 		},
@@ -825,16 +828,16 @@ require("lazy").setup({
 				harpoon.ui:toggle_quick_menu(harpoon:list())
 			end)
 
-			vim.keymap.set("n", "<C-h>", function()
+			vim.keymap.set("n", "<A-h>", function()
 				harpoon:list():select(1)
 			end)
-			vim.keymap.set("n", "<C-t>", function()
+			vim.keymap.set("n", "<A-t>", function()
 				harpoon:list():select(2)
 			end)
-			vim.keymap.set("n", "<C-n>", function()
+			vim.keymap.set("n", "<A-n>", function()
 				harpoon:list():select(3)
 			end)
-			vim.keymap.set("n", "<C-s>", function()
+			vim.keymap.set("n", "<A-s>", function()
 				harpoon:list():select(4)
 			end)
 
@@ -916,6 +919,14 @@ require("lazy").setup({
 						enabled = false,
 					},
 				},
+				offsets = {
+					{
+						filetype = "NvimTree",
+						text = "File Explorer", -- Optional: Displayed text
+						highlight = "Directory", -- Highlight group for the text
+						text_align = "left", -- Text alignment: left, center, or right
+					},
+				},
 			})
 		end,
 		version = "^1.0.0", -- optional: only update when a new 1.x version is released
@@ -924,6 +935,16 @@ require("lazy").setup({
 		"supermaven-inc/supermaven-nvim",
 		config = function()
 			require("supermaven-nvim").setup({})
+		end,
+	},
+	{
+		"nvim-tree/nvim-tree.lua",
+		config = function()
+			require("nvim-tree").setup({
+				-- your configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+			})
 		end,
 	},
 	{
