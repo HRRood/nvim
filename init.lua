@@ -59,15 +59,8 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- TIP: Disable arrow keys in normal mode
 vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
@@ -78,14 +71,7 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move window down", noremap = tr
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move window up", noremap = true, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move window right", noremap = true, silent = true })
 
--- Add keybinds to move cursor in insert mode
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Go to explorer" })
--- [[ Basic Autocommands ]]
---  See `:help lua-guide-autocommands`
-
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
@@ -94,8 +80,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -938,23 +922,48 @@ require("lazy").setup({
 		end,
 	},
 	{
+		"Fildo7525/pretty_hover",
+		event = "LspAttach",
+		opts = {},
+		config = function()
+			-- Configuration options for pretty_hover
+			require("pretty_hover").setup({
+				border = "rounded", -- Use a rounded border style for hover windows
+				max_width = 80, -- Set maximum width for hover text
+				max_height = 20, -- Set maximum height for hover text
+				padding = 2, -- Add padding around the hover text
+				highlight_group = "NormalFloat", -- Highlight group for hover windows
+				transparency = 10, -- Set transparency (0-100, where 0 is opaque)
+			})
+
+			-- Optional: Keybinding to manually trigger hover
+			vim.api.nvim_set_keymap(
+				"n",
+				"K",
+				"<cmd>lua require('pretty_hover').hover()<CR>",
+				{ noremap = true, silent = true, desc = "Show hover information" }
+			)
+		end,
+	},
+	{
+		"OlegGulevskyy/better-ts-errors.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		config = function()
+			require("better-ts-errors").setup({
+				keymaps = {
+					toggle = "<leader>dd", -- Toggle the error explanation
+					go_to_definition = "<leader>dx", -- Jump to the error's definition
+				},
+			})
+		end,
+		event = "LspAttach", -- Ensure the plugin loads when the LSP attaches
+	},
+	{
 		"nvim-tree/nvim-tree.lua",
 		config = function()
 			require("nvim-tree").setup({
-				git = {
-					ignore = false, -- Show files ignored by .gitignore
-				},
-				filters = {
-					dotfiles = false, -- Show dotfiles
-					custom = {}, -- No custom filters
-				},
 				update_focused_file = {
 					enable = true,
-					update_cwd = true,
-					ignore_list = {},
-				},
-				view = {
-					adaptive_size = true,
 				},
 			})
 		end,
