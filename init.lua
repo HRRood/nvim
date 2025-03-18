@@ -10,7 +10,7 @@ vim.opt.wrap = false
 vim.opt.mouse = "a"
 
 -- Don't show the mode, since it's already in the status line
-vim.opt.showmode = true
+-- vim.opt.showmode = true
 
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
@@ -20,11 +20,11 @@ end)
 vim.opt.breakindent = true
 
 vim.opt.smartindent = true -- Enable smart indentation
-vim.opt.tabstop = 4 -- Number of spaces per tab
-vim.opt.shiftwidth = 4 -- Number of spaces for auto-indentation
+vim.opt.tabstop = 2 -- Number of spaces per tab
+vim.opt.shiftwidth = 2 -- Number of spaces for auto-indentation
 vim.opt.expandtab = true -- Convert tabs to spaces
 -- Save undo history
-vim.opt.undofile = true
+vim.opt.undofile = false
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -51,7 +51,7 @@ vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 30
+vim.opt.scrolloff = 10
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -698,24 +698,53 @@ require("lazy").setup({
 		end,
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
+	--{ -- You can easily change to a different colorscheme.
+	-- Change the name of the colorscheme plugin below, and then
+	-- change the command in the config to whatever the name of that colorscheme is.
+	--
+	-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+	-- 	"folke/tokyonight.nvim",
+	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
+	-- 	init = function()
+	-- 		-- Load the colorscheme here.
+	-- 		-- Like many other themes, this one has different styles, and you could load
+	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+	-- 		vim.cmd.colorscheme("tokyonight-moon")
+	--
+	-- 		-- You can configure highlights by doing something like:
+	-- 		vim.cmd.hi("Comment gui=none")
+	-- 	end,
+	-- },
+	--
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			require("catppuccin").setup({
+				flavour = "mocha", -- latte, frappe, macchiato, mocha
+				background = { -- :h background
+					light = "latte",
+					dark = "mocha",
+				},
+				transparent_background = true,
+				show_end_of_buffer = false, -- show the '~' characters after the end of buffers
+				term_colors = true, -- set terminal colors (vim.g.terminal_color_0 = base.Red)
+				no_italic = false, -- force no italic
+				no_bold = false, -- force no bold
+				styles = {
+					comments = { "italic" },
+					functions = { "italic" },
+					keywords = { "italic" },
+					strings = { "italic" },
+					variables = { "italic" },
+				},
+			})
+		end,
 		init = function()
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
-
-			-- You can configure highlights by doing something like:
-			vim.cmd.hi("Comment gui=none")
+			vim.cmd.colorscheme("catppuccin-mocha")
 		end,
 	},
-
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
@@ -795,50 +824,10 @@ require("lazy").setup({
 		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 	},
 	{
-		"ThePrimeagen/harpoon",
-		branch = "harpoon2",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			local harpoon = require("harpoon")
-
-			-- REQUIRED
-			harpoon:setup()
-			-- REQUIRED
-
-			vim.keymap.set("n", "<C-a>", function()
-				harpoon:list():add()
-			end)
-			vim.keymap.set("n", "<C-e>", function()
-				harpoon.ui:toggle_quick_menu(harpoon:list())
-			end)
-
-			vim.keymap.set("n", "<A-h>", function()
-				harpoon:list():select(1)
-			end)
-			vim.keymap.set("n", "<A-j>", function()
-				harpoon:list():select(2)
-			end)
-			vim.keymap.set("n", "<A-k>", function()
-				harpoon:list():select(3)
-			end)
-			vim.keymap.set("n", "<A-l>", function()
-				harpoon:list():select(4)
-			end)
-
-			-- Toggle previous & next buffers stored within Harpoon list
-			vim.keymap.set("n", "<C-S-P>", function()
-				harpoon:list():prev()
-			end)
-			vim.keymap.set("n", "<C-S-N>", function()
-				harpoon:list():next()
-			end)
-		end,
-	},
-	{
 		"romgrk/barbar.nvim",
 		dependencies = {
-			"lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-			"nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+			-- "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+			-- "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
 		},
 		init = function()
 			vim.g.barbar_auto_setup = false
