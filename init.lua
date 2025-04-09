@@ -287,7 +287,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "[P]roject [S]earch" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+			-- vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>pr", builtin.resume, { desc = "[P]roject search [R]esume" })
 			vim.keymap.set("n", "<leader>sr", ":%s//<Left>", { desc = "[S]earch [R]eplace" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -317,26 +317,19 @@ require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
-
-	-- LSP Plugins
 	{
-		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-		-- used for completion, annotations and signatures of Neovim apis
 		"folke/lazydev.nvim",
 		ft = "lua",
 		opts = {
 			library = {
-				-- Load luvit types when the `vim.uv` word is found
 				{ path = "luvit-meta/library", words = { "vim%.uv" } },
 			},
 		},
 	},
 	{ "Bilal2453/luvit-meta", lazy = true },
 	{
-		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
 			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -729,7 +722,7 @@ require("lazy").setup({
 				},
 				transparent_background = true,
 				show_end_of_buffer = false, -- show the '~' characters after the end of buffers
-				term_colors = true, -- set terminal colors (vim.g.terminal_color_0 = base.Red)
+				term_colors = false, -- set terminal colors (vim.g.terminal_color_0 = base.Red)
 				no_italic = false, -- force no italic
 				no_bold = false, -- force no bold
 				styles = {
@@ -987,53 +980,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-
-	-- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
-	-- init.lua. If you want these files, they are in the repository, so you can just download them and
-	-- place them in the correct locations.
-
-	-- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-	--
-	--  Here are some example plugins that I've included in the Kickstart repository.
-	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
-	--
-	-- require 'kickstart.plugins.debug',
-	-- require 'kickstart.plugins.indent_line',
-	-- require 'kickstart.plugins.lint',
-	-- require 'kickstart.plugins.autopairs',
-	-- require 'kickstart.plugins.neo-tree',
-	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
-	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-	--    This is the easiest way to modularize your config.
-	--
-	--  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-	-- { import = 'custom.plugins' },
-	--
-	-- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
-	-- Or use telescope!
-	-- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
-	-- you can continue same window with `<space>sr` which resumes last telescope search
-}, {
-	ui = {
-		-- If you are using a Nerd Font: set icons to an empty table which will use the
-		-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-		icons = vim.g.have_nerd_font and {} or {
-			cmd = "⌘",
-			config = "🛠",
-			event = "📅",
-			ft = "📂",
-			init = "⚙",
-			keys = "🗝",
-			plugin = "🔌",
-			runtime = "💻",
-			require = "🌙",
-			source = "📄",
-			start = "🚀",
-			task = "📌",
-			lazy = "💤 ",
-		},
-	},
 })
 vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = true, silent = true })
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
@@ -1041,5 +987,35 @@ vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up", noremap = true, 
 vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = true, silent = true })
 vim.keymap.set("n", "<Down>", "ddp")
 vim.keymap.set("n", "<Up>", "ddkP")
+vim.keymap.set("n", "<leader>sd", function()
+	--keymap for "_dhp in normal mode
+	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
+	-- Prompt the user for directories to search
+	local input = vim.fn.input("Search directories: ")
+	if input ~= "" then
+		-- Split the input by spaces to handle multiple directories
+		local dirs = vim.split(input, " ")
+		require("telescope.builtin").live_grep({ search_dirs = dirs })
+	end
+end, { desc = "Search in specific directories" })
+
+vim.keymap.set("n", "<leader>ra", function()
+	-- Prompt for the search pattern
+	local search = vim.fn.input("Search pattern: ")
+	if search == "" then
+		print("Search pattern cannot be empty")
+		return
+	end
+
+	-- Prompt for the replacement text
+	local replace = vim.fn.input("Replace with: ")
+
+	-- Build and execute the command
+	local cmd = string.format(":cdo s/%s/%s/gc | update", search:gsub("/", "\\/"), replace:gsub("/", "\\/"))
+	vim.cmd(cmd)
+
+	-- Save all files
+	vim.cmd("wa")
+end, { desc = "Replace across files and save" })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
