@@ -8,10 +8,6 @@ vim.opt.relativenumber = true
 vim.opt.wrap = false
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
-
--- Don't show the mode, since it's already in the status line
--- vim.opt.showmode = true
-
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
@@ -38,8 +34,6 @@ vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
@@ -68,6 +62,10 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move window down", noremap = tr
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move window up", noremap = true, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move window right", noremap = true, silent = true })
 
+-- Add blank line below or above cursor
+vim.keymap.set("n", "<leader>o", "o<Esc>", { desc = "Add blank line below" })
+vim.keymap.set("n", "<leader>O", "O<Esc>", { desc = "Add blank line above" })
+
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Go to explorer" })
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
@@ -76,6 +74,74 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+
+vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = true, silent = true })
+vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
+vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up", noremap = true, silent = true })
+vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = true, silent = true })
+vim.keymap.set("n", "<Down>", "ddp")
+vim.keymap.set("n", "<Up>", "ddkP")
+vim.keymap.set("n", "<leader>sd", function()
+	--keymap for "_dhp in normal mode
+	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
+	-- Prompt the user for directories to search
+	local input = vim.fn.input("Search directories: ")
+	if input ~= "" then
+		-- Split the input by spaces to handle multiple directories
+		local dirs = vim.split(input, " ")
+		require("telescope.builtin").live_grep({ search_dirs = dirs })
+	end
+end, { desc = "Search in specific directories" })
+
+vim.keymap.set("n", "<leader>ra", function()
+	-- Prompt for the search pattern
+	local search = vim.fn.input("Search pattern: ")
+	if search == "" then
+		print("Search pattern cannot be empty")
+		return
+	end
+
+	-- Prompt for the replacement text
+	local replace = vim.fn.input("Replace with: ")
+
+	-- Build and execute the command
+	local cmd = string.format(":cdo s/%s/%s/gc | update", search:gsub("/", "\\/"), replace:gsub("/", "\\/"))
+	vim.cmd(cmd)
+
+	-- Save all files
+	vim.cmd("wa")
+end, { desc = "Replace across files and save" })
+
+-- ============================================================================
+-- WINDOWS-SPECIFIC SETTINGS
+-- ============================================================================
+
+-- Improve Windows clipboard performance
+if vim.fn.has("win32") == 1 then
+	vim.g.clipboard = {
+		name = "WslClipboard",
+		copy = {
+			["+"] = "clip.exe",
+			["*"] = "clip.exe",
+		},
+		paste = {
+			["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+			["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+		},
+		cache_enabled = 0,
+	}
+end
+
+-- Better shell settings for Windows
+if vim.fn.has("win32") == 1 then
+	vim.opt.shell = "powershell"
+	vim.opt.shellcmdflag =
+		"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+	vim.opt.shellredir = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+	vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+	vim.opt.shellquote = ""
+	vim.opt.shellxquote = ""
+end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -458,25 +524,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-
-	--{ -- You can easily change to a different colorscheme.
-	-- Change the name of the colorscheme plugin below, and then
-	-- change the command in the config to whatever the name of that colorscheme is.
-	--
-	-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-	-- 	"folke/tokyonight.nvim",
-	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
-	-- 	init = function()
-	-- 		-- Load the colorscheme here.
-	-- 		-- Like many other themes, this one has different styles, and you could load
-	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-	-- 		vim.cmd.colorscheme("tokyonight-moon")
-	--
-	-- 		-- You can configure highlights by doing something like:
-	-- 		vim.cmd.hi("Comment gui=none")
-	-- 	end,
-	-- },
-	--
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
@@ -551,38 +598,72 @@ require("lazy").setup({
 			--  Check out: https://github.com/echasnovski/mini.nvim
 		end,
 	},
-	{ -- Highlight, edit, and navigate code
+	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
-		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-		opts = {
-			ensure_installed = {
-				"bash",
-				"c",
-				"diff",
-				"html",
-				"lua",
-				"luadoc",
-				"markdown",
-				"markdown_inline",
-				"query",
-				"vim",
-				"vimdoc",
-			},
-			-- Autoinstall languages that are not installed
-			auto_install = true,
-			highlight = {
-				enable = true,
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
-		-- There are additional nvim-treesitter modules that you can use to interact
-		-- with nvim-treesitter. You should go explore a few and see what interests you:
-		--
-		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = {
+					"c",
+					"lua",
+					"vim",
+					"vimdoc",
+					"query",
+					"javascript",
+					"typescript",
+					"python",
+					"rust",
+				},
+				sync_install = false,
+				auto_install = true,
+				ignore_install = { "some_problematic_parser" },
+
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = false,
+				},
+
+				indent = {
+					enable = true,
+				},
+
+				textobjects = {
+					select = {
+						enable = true,
+						lookahead = true,
+						keymaps = {
+							["af"] = "@function.outer",
+							["if"] = "@function.inner",
+							["ac"] = "@class.outer",
+							["ic"] = "@class.inner",
+						},
+					},
+					move = {
+						enable = true,
+						set_jumps = true,
+						goto_next_start = {
+							["]m"] = "@function.outer",
+							["]]"] = "@class.outer",
+						},
+						goto_next_end = {
+							["]M"] = "@function.outer",
+							["]["] = "@class.outer",
+						},
+						goto_previous_start = {
+							["[m"] = "@function.outer",
+							["[["] = "@class.outer",
+						},
+						goto_previous_end = {
+							["[M"] = "@function.outer",
+							["[]"] = "@class.outer",
+						},
+					},
+				},
+
+				-- Add this line
+				modules = {}, -- This field is explicitly required by TSConfig
+			})
+		end,
 	},
 	{
 		"romgrk/barbar.nvim",
@@ -619,6 +700,7 @@ require("lazy").setup({
 			--                 :BufferGotoUnpinned
 			-- Close buffer
 			map("n", "<leader>bc", "<Cmd>BufferClose<CR>", { noremap = true, silent = true })
+			map("n", "<leader>ba", "<Cmd>BufferCloseAllButCurrent<CR>", { noremap = true, silent = true })
 			-- Wipeout buffer
 			--                 :BufferWipeout
 			-- Close commands
@@ -655,10 +737,10 @@ require("lazy").setup({
 				},
 				offsets = {
 					{
-						filetype = "NvimTree",
-						text = "File Explorer", -- Optional: Displayed text
-						highlight = "Directory", -- Highlight group for the text
-						text_align = "left", -- Text alignment: left, center, or right
+						filetype = "neo-tree",
+						text = "Neo-tree",
+						highlight = "Directory",
+						text_align = "left",
 					},
 				},
 			})
@@ -709,31 +791,68 @@ require("lazy").setup({
 		event = "LspAttach", -- Ensure the plugin loads when the LSP attaches
 	},
 	{
-		"nvim-tree/nvim-tree.lua",
-		config = function()
-			require("nvim-tree").setup({
-				update_focused_file = {
-					enable = true,
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+		keys = {
+			{ "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" },
+			{ "<leader>E", "<cmd>Neotree reveal<cr>", desc = "Reveal current file in Neo-tree" },
+		},
+		opts = {
+			filesystem = {
+				follow_current_file = {
+					enabled = true,
+					leave_dirs_open = false,
 				},
-			})
-		end,
+				hijack_netrw_behavior = "open_current",
+				use_libuv_file_watcher = true,
+			},
+			window = {
+				width = 30,
+				mappings = {
+					["<space>"] = "none",
+					["o"] = "open",
+					["O"] = "open_no_focus",
+					["<cr>"] = "open",
+					["S"] = "open_split",
+					["s"] = "open_vsplit",
+					["t"] = "open_tabnew",
+					["C"] = "close_node",
+					["z"] = "close_all_nodes",
+					["Z"] = "expand_all_nodes",
+					["a"] = "add",
+					["A"] = "add_directory",
+					["d"] = "delete",
+					["r"] = "rename",
+					["y"] = "copy_to_clipboard",
+					["x"] = "cut_to_clipboard",
+					["p"] = "paste_from_clipboard",
+					["c"] = "copy",
+					["m"] = "move",
+					["q"] = "close_window",
+					["R"] = "refresh",
+					["?"] = "show_help",
+				},
+			},
+		},
 	},
 	{
 		"Fildo7525/pretty_hover",
 		event = "LspAttach",
 		opts = {},
 		config = function()
-			-- Configuration options for pretty_hover
 			require("pretty_hover").setup({
-				border = "rounded", -- Use a rounded border style for hover windows
-				max_width = 80, -- Set maximum width for hover text
-				max_height = 20, -- Set maximum height for hover text
-				padding = 2, -- Add padding around the hover text
-				highlight_group = "NormalFloat", -- Highlight group for hover windows
-				transparency = 10, -- Set transparency (0-100, where 0 is opaque)
+				border = "rounded",
+				max_width = 80,
+				max_height = 20,
+				padding = 2,
+				highlight_group = "NormalFloat",
+				transparency = 10,
 			})
-
-			-- Optional: Keybinding to manually trigger hover
 			vim.api.nvim_set_keymap(
 				"n",
 				"K",
@@ -845,7 +964,7 @@ require("lazy").setup({
 				end,
 				open_mapping = [[<c-\>]],
 				shade_terminals = true,
-				shading_factor = 2, -- The degree of shading applied for terminals
+				shading_factor = 4, -- The degree of shading applied for terminals
 				start_in_insert = true,
 				insert_mappings = true, -- Allow terminal to be opened using the specified mapping in insert mode
 				persist_size = true,
@@ -862,41 +981,21 @@ require("lazy").setup({
 		end,
 	},
 })
-vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = true, silent = true })
-vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
-vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up", noremap = true, silent = true })
-vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = true, silent = true })
-vim.keymap.set("n", "<Down>", "ddp")
-vim.keymap.set("n", "<Up>", "ddkP")
-vim.keymap.set("n", "<leader>sd", function()
-	--keymap for "_dhp in normal mode
-	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
-	-- Prompt the user for directories to search
-	local input = vim.fn.input("Search directories: ")
-	if input ~= "" then
-		-- Split the input by spaces to handle multiple directories
-		local dirs = vim.split(input, " ")
-		require("telescope.builtin").live_grep({ search_dirs = dirs })
-	end
-end, { desc = "Search in specific directories" })
+-- Faster startup
+vim.loader.enable()
 
-vim.keymap.set("n", "<leader>ra", function()
-	-- Prompt for the search pattern
-	local search = vim.fn.input("Search pattern: ")
-	if search == "" then
-		print("Search pattern cannot be empty")
-		return
-	end
+-- Disable some default plugins for better performance
+local disabled_plugins = {
+	"gzip",
+	"matchit",
+	"matchparen",
+	"netrwPlugin",
+	"tarPlugin",
+	"tohtml",
+	"tutor",
+	"zipPlugin",
+}
 
-	-- Prompt for the replacement text
-	local replace = vim.fn.input("Replace with: ")
-
-	-- Build and execute the command
-	local cmd = string.format(":cdo s/%s/%s/gc | update", search:gsub("/", "\\/"), replace:gsub("/", "\\/"))
-	vim.cmd(cmd)
-
-	-- Save all files
-	vim.cmd("wa")
-end, { desc = "Replace across files and save" })
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+for _, plugin in pairs(disabled_plugins) do
+	vim.g["loaded_" .. plugin] = 1
+end
