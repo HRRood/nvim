@@ -6,66 +6,40 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.wrap = false
--- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = "a"
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
-
--- Enable break indent
 vim.opt.breakindent = true
-
-vim.opt.smartindent = true -- Enable smart indentation
-vim.opt.tabstop = 2 -- Number of spaces per tab
-vim.opt.shiftwidth = 2 -- Number of spaces for auto-indentation
-vim.opt.expandtab = true -- Convert tabs to spaces
--- Save undo history
+vim.opt.smartindent = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
 vim.opt.undofile = false
-
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
-
 vim.opt.updatetime = 250
--- Displays which-key popup sooner
 vim.opt.timeoutlen = 300
-
--- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-
---  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
--- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
-
--- Show which line your cursor is on
 vim.opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
-
--- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
 vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
-
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move window left", noremap = true, silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move window down", noremap = true, silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move window up", noremap = true, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move window right", noremap = true, silent = true })
-
--- Add blank line below or above cursor
 vim.keymap.set("n", "<leader>o", "o<Esc>", { desc = "Add blank line below" })
 vim.keymap.set("n", "<leader>O", "O<Esc>", { desc = "Add blank line above" })
-
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Go to explorer" })
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
@@ -82,41 +56,15 @@ vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = 
 vim.keymap.set("n", "<Down>", "ddp")
 vim.keymap.set("n", "<Up>", "ddkP")
 vim.keymap.set("n", "<leader>sd", function()
-	--keymap for "_dhp in normal mode
 	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
-	-- Prompt the user for directories to search
 	local input = vim.fn.input("Search directories: ")
 	if input ~= "" then
-		-- Split the input by spaces to handle multiple directories
 		local dirs = vim.split(input, " ")
 		require("telescope.builtin").live_grep({ search_dirs = dirs })
 	end
-end, { desc = "Search in specific directories" })
+end, { desc = "Search in a specific directory" })
 
-vim.keymap.set("n", "<leader>ra", function()
-	-- Prompt for the search pattern
-	local search = vim.fn.input("Search pattern: ")
-	if search == "" then
-		print("Search pattern cannot be empty")
-		return
-	end
-
-	-- Prompt for the replacement text
-	local replace = vim.fn.input("Replace with: ")
-
-	-- Build and execute the command
-	local cmd = string.format(":cdo s/%s/%s/gc | update", search:gsub("/", "\\/"), replace:gsub("/", "\\/"))
-	vim.cmd(cmd)
-
-	-- Save all files
-	vim.cmd("wa")
-end, { desc = "Replace across files and save" })
-
--- ============================================================================
 -- WINDOWS-SPECIFIC SETTINGS
--- ============================================================================
-
--- Improve Windows clipboard performance
 if vim.fn.has("win32") == 1 then
 	vim.g.clipboard = {
 		name = "WslClipboard",
@@ -132,7 +80,6 @@ if vim.fn.has("win32") == 1 then
 	}
 end
 
--- Better shell settings for Windows
 if vim.fn.has("win32") == 1 then
 	vim.opt.shell = "powershell"
 	vim.opt.shellcmdflag =
@@ -150,11 +97,11 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	if vim.v.shell_error ~= 0 then
 		error("Error cloning lazy.nvim:\n" .. out)
 	end
-end ---@diagnostic disable-next-line: undefined-field
+end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+	"tpope/vim-sleuth",
 	{
 		"lewis6991/gitsigns.nvim",
 		opts = {
@@ -169,7 +116,7 @@ require("lazy").setup({
 	},
 	{
 		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter'
+		event = "VimEnter",
 		opts = {
 			icons = {
 				mappings = vim.g.have_nerd_font,
@@ -209,21 +156,19 @@ require("lazy").setup({
 				{ "<leader>b", group = "[B]uffer", mode = { "n", "x" } },
 				{ "<leader>d", group = "[D]ocument" },
 				{ "<leader>r", group = "[R]ename" },
-				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>w", group = "[W]orkspace" },
 				{ "<leader>t", group = "[T]oggle" },
 				{ "<leader>p", group = "[P]roject" },
-				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 			},
 		},
 	},
-	{ -- Fuzzy Finder (files, lsp, etc)
+	{
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
 		branch = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
+			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 
 				build = "make",
@@ -246,12 +191,8 @@ require("lazy").setup({
 					},
 				},
 			})
-
-			-- Enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
-
-			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
@@ -264,21 +205,20 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
-			-- Slightly advanced example of overriding default behavior and theme
-			vim.keymap.set("n", "<leader>/", function()
-				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
+			vim.keymap.set("n", "<leader>sb", function()
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
+					winblend = 20,
+					previewer = true,
+					prompt_title = "Fuzzily Search in Current Buffer",
 				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
+			end, { desc = "Fuzzily [S]earch in current [B]uffer" })
 
-			vim.keymap.set("n", "<leader>s/", function()
+			vim.keymap.set("n", "<leader>so", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
+			end, { desc = "[S]earch in [O]pen Files" })
 		end,
 	},
 	{
@@ -297,12 +237,7 @@ require("lazy").setup({
 			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-
-			-- Useful status updates for LSP.
-			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 			{ "j-hui/fidget.nvim", opts = {} },
-
-			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
@@ -316,13 +251,8 @@ require("lazy").setup({
 					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-					map("<leader>td", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+					map("<leader>td", require("telescope.builtin").lsp_type_definitions, "[T]ype [D]efinition")
 					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-					map(
-						"<leader>ws",
-						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[W]orkspace [S]ymbols"
-					)
 					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
@@ -375,16 +305,29 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"eslint",
+				"tailwindcss",
+				"cssls",
+				"html",
+				"jsonls",
+				"ts_ls",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"lua_ls",
+					"eslint",
+					"tailwindcss",
+					"cssls",
+					"html",
+					"jsonls",
+					"ts_ls",
+				},
+				automatic_installation = true,
 				handlers = {
 					function(server_name)
 						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
 						require("lspconfig")[server_name].setup(server)
 					end,
@@ -393,26 +336,23 @@ require("lazy").setup({
 		end,
 	},
 
-	{ -- Autoformat
+	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>fb",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
-				desc = "[F]ormat buffer",
+				desc = "[F]ormat [B]uffer",
 			},
 		},
 		opts = {
 			notify_on_error = false,
 			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't
-				-- have a well standardized coding style. You can add additional
-				-- languages here or re-enable it for the disabled ones.
 				local disable_filetypes = { c = true, cpp = true }
 				local lsp_format_opt
 				if disable_filetypes[vim.bo[bufnr].filetype] then
@@ -427,34 +367,24 @@ require("lazy").setup({
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
-				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
-				--
-				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { "prettier" },
+				typescript = { "prettier" },
+				css = { "prettier" },
+				html = { "prettier" },
 			},
 		},
 	},
 
-	{ -- Autocompletion
+	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
 			{
 				"L3MON4D3/LuaSnip",
 				build = (function()
-					-- Build Step is needed for regex support in snippets.
-					-- This step is not supported in many windows environments.
-					-- Remove the below condition to re-enable on windows.
-					-- if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-					-- 	return
-					-- end
 					return "make install_jsregexp"
 				end)(),
 				dependencies = {
-					-- `friendly-snippets` contains a variety of premade snippets.
-					--    See the README about individual language/framework/plugin snippets:
-					--    https://github.com/rafamadriz/friendly-snippets
 					{
 						"rafamadriz/friendly-snippets",
 						config = function()
@@ -468,7 +398,6 @@ require("lazy").setup({
 			"hrsh7th/cmp-path",
 		},
 		config = function()
-			-- See `:help cmp`
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			luasnip.config.setup({})
@@ -480,41 +409,17 @@ require("lazy").setup({
 					end,
 				},
 				completion = { completeopt = "menu,menuone,noinsert" },
-
-				-- For an understanding of why these mappings were
-				-- chosen, you will need to read `:help ins-completion`
-				--
-				-- No, but seriously. Please read `:help ins-completion`, it is really good!
 				mapping = cmp.mapping.preset.insert({
-					-- Select the [n]ext item
 					["<C-n>"] = cmp.mapping.select_next_item(),
-					-- Select the [p]revious item
 					["<C-p>"] = cmp.mapping.select_prev_item(),
-
-					-- Scroll the documentation window [b]ack / [f]orward
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-
-					-- Accept ([y]es) the completion.
-					--  This will auto-import if your LSP supports it.
-					--  This will expand snippets if the LSP sent a snippet.
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
-
-					-- If you prefer more traditional completion keymaps,
-					-- you can uncomment the following lines
-					--['<CR>'] = cmp.mapping.confirm { select = true },
-					--['<Tab>'] = cmp.mapping.select_next_item(),
-					--['<S-Tab>'] = cmp.mapping.select_prev_item(),
-
-					-- Manually trigger a completion from nvim-cmp.
-					--  Generally you don't need this, because nvim-cmp will display
-					--  completions whenever it has completion options available.
 					["<C-Space>"] = cmp.mapping.complete({}),
 				}),
 				sources = {
 					{
 						name = "lazydev",
-						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
 						group_index = 0,
 					},
 					{ name = "nvim_lsp" },
@@ -553,7 +458,6 @@ require("lazy").setup({
 			vim.cmd.colorscheme("catppuccin-mocha")
 		end,
 	},
-	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
@@ -561,10 +465,9 @@ require("lazy").setup({
 		opts = { signs = false },
 	},
 
-	{ -- Collection of various small independent plugins/modules
+	{
 		"echasnovski/mini.nvim",
 		config = function()
-			-- Better Around/Inside textobjects
 			--
 			-- Examples:
 			--  - va)  - [V]isually select [A]round [)]paren
@@ -593,9 +496,6 @@ require("lazy").setup({
 			statusline.section_location = function()
 				return "%2l:%-2v"
 			end
-
-			-- ... and there is more!
-			--  Check out: https://github.com/echasnovski/mini.nvim
 		end,
 	},
 	{
@@ -667,22 +567,15 @@ require("lazy").setup({
 	},
 	{
 		"romgrk/barbar.nvim",
-		dependencies = {
-			-- "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-			-- "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
-		},
+		dependencies = {},
 		init = function()
 			vim.g.barbar_auto_setup = false
 			local map = vim.api.nvim_set_keymap
 			local opts = { noremap = true, silent = true }
-
-			-- Move to previous/next
 			map("n", "<A-,>", "<Cmd>BufferPrevious<CR>", opts)
 			map("n", "<A-.>", "<Cmd>BufferNext<CR>", opts)
-			-- Re-order to previous/next
 			map("n", "<leader><", "<Cmd>BufferMovePrevious<CR>", opts)
 			map("n", "<leader>>", "<Cmd>BufferMoveNext<CR>", opts)
-			-- Goto buffer in position...
 			map("n", "<leader>1", "<Cmd>BufferGoto 1<CR>", opts)
 			map("n", "<leader>2", "<Cmd>BufferGoto 2<CR>", opts)
 			map("n", "<leader>3", "<Cmd>BufferGoto 3<CR>", opts)
@@ -693,41 +586,16 @@ require("lazy").setup({
 			map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", opts)
 			map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", opts)
 			map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
-			-- Pin/unpin buffer
 			map("n", "<A-p>", "<Cmd>BufferPin<CR>", opts)
-			-- Goto pinned/unpinned buffer
-			--                 :BufferGotoPinned
-			--                 :BufferGotoUnpinned
-			-- Close buffer
 			map("n", "<leader>bc", "<Cmd>BufferClose<CR>", { noremap = true, silent = true })
 			map("n", "<leader>ba", "<Cmd>BufferCloseAllButCurrent<CR>", { noremap = true, silent = true })
-			-- Wipeout buffer
-			--                 :BufferWipeout
-			-- Close commands
-			--                 :BufferCloseAllButCurrent
-			--                 :BufferCloseAllButPinned
-			--                 :BufferCloseAllButCurrentOrPinned
-			--                 :BufferCloseBuffersLeft
-			--                 :BufferCloseBuffersRight
-			-- Magic buffer-picking mode
 			map("n", "<C-p>", "<Cmd>BufferPick<CR>", opts)
-			-- Sort automatically by...
 			map("n", "<Space>bb", "<Cmd>BufferOrderByBufferNumber<CR>", opts)
 			map("n", "<Space>bn", "<Cmd>BufferOrderByName<CR>", opts)
 			map("n", "<Space>bd", "<Cmd>BufferOrderByDirectory<CR>", opts)
 			map("n", "<Space>bl", "<Cmd>BufferOrderByLanguage<CR>", opts)
 			map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", opts)
-
-			-- Other:
-			-- :BarbarEnable - enables barbar (enabled by default)
-			-- :BarbarDisable - very bad command, should never be used
 		end,
-		opts = {
-			-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-			-- animation = true,
-			-- insert_at_start = true,
-			-- …etc.
-		},
 		config = function()
 			require("barbar").setup({
 				icons = {
@@ -745,50 +613,13 @@ require("lazy").setup({
 				},
 			})
 		end,
-		version = "^1.0.0", -- optional: only update when a new 1.x version is released
+		version = "^1.0.0",
 	},
 	{
 		"supermaven-inc/supermaven-nvim",
 		config = function()
 			require("supermaven-nvim").setup({})
 		end,
-	},
-	{
-		"Fildo7525/pretty_hover",
-		event = "LspAttach",
-		opts = {},
-		config = function()
-			-- Configuration options for pretty_hover
-			require("pretty_hover").setup({
-				border = "rounded", -- Use a rounded border style for hover windows
-				max_width = 80, -- Set maximum width for hover text
-				max_height = 20, -- Set maximum height for hover text
-				padding = 2, -- Add padding around the hover text
-				highlight_group = "NormalFloat", -- Highlight group for hover windows
-				transparency = 10, -- Set transparency (0-100, where 0 is opaque)
-			})
-
-			-- Optional: Keybinding to manually trigger hover
-			vim.api.nvim_set_keymap(
-				"n",
-				"K",
-				"<cmd>lua require('pretty_hover').hover()<CR>",
-				{ noremap = true, silent = true, desc = "Show hover information" }
-			)
-		end,
-	},
-	{
-		"OlegGulevskyy/better-ts-errors.nvim",
-		dependencies = { "MunifTanjim/nui.nvim" },
-		config = function()
-			require("better-ts-errors").setup({
-				keymaps = {
-					toggle = "<leader>dd", -- Toggle the error explanation
-					go_to_definition = "<leader>dx", -- Jump to the error's definition
-				},
-			})
-		end,
-		event = "LspAttach", -- Ensure the plugin loads when the LSP attaches
 	},
 	{
 		"nvim-neo-tree/neo-tree.nvim",
@@ -813,6 +644,7 @@ require("lazy").setup({
 			},
 			window = {
 				width = 30,
+				position = "left",
 				mappings = {
 					["<space>"] = "none",
 					["o"] = "open",
@@ -859,6 +691,13 @@ require("lazy").setup({
 				"<cmd>lua require('pretty_hover').hover()<CR>",
 				{ noremap = true, silent = true, desc = "Show hover information" }
 			)
+			-- add keybind for Close hover information
+			vim.api.nvim_set_keymap(
+				"n",
+				"<leader>L",
+				"<cmd>lua require('pretty_hover').close()<CR>",
+				{ noremap = true, silent = true, desc = "Close hover information" }
+			)
 		end,
 	},
 	{
@@ -884,10 +723,10 @@ require("lazy").setup({
 			local set = vim.keymap.set
 
 			-- Add or skip cursor above/below the main cursor.
-			set({ "n", "x" }, "<up>", function()
+			set({ "n", "x" }, "<A-Up>", function()
 				mc.lineAddCursor(-1)
 			end)
-			set({ "n", "x" }, "<down>", function()
+			set({ "n", "x" }, "<A-Down>", function()
 				mc.lineAddCursor(1)
 			end)
 			set({ "n", "x" }, "<leader><up>", function()
@@ -910,26 +749,17 @@ require("lazy").setup({
 			set({ "n", "x" }, "<leader>S", function()
 				mc.matchSkipCursor(-1)
 			end)
-
-			-- Add and remove cursors with control + left click.
 			set("n", "<c-leftmouse>", mc.handleMouse)
 			set("n", "<c-leftdrag>", mc.handleMouseDrag)
 			set("n", "<c-leftrelease>", mc.handleMouseRelease)
-
-			-- Disable and enable cursors.
 			set({ "n", "x" }, "<c-q>", mc.toggleCursor)
 
-			-- Mappings defined in a keymap layer only apply when there are
-			-- multiple cursors. This lets you have overlapping mappings.
 			mc.addKeymapLayer(function(layerSet)
-				-- Select a different cursor as the main one.
 				layerSet({ "n", "x" }, "<left>", mc.prevCursor)
 				layerSet({ "n", "x" }, "<right>", mc.nextCursor)
 
-				-- Delete the main cursor.
 				layerSet({ "n", "x" }, "<leader>x", mc.deleteCursor)
 
-				-- Enable and clear cursors using escape.
 				layerSet("n", "<esc>", function()
 					if not mc.cursorsEnabled() then
 						mc.enableCursors()
@@ -939,7 +769,6 @@ require("lazy").setup({
 				end)
 			end)
 
-			-- Customize how cursors look.
 			local hl = vim.api.nvim_set_hl
 			hl(0, "MultiCursorCursor", { link = "Cursor" })
 			hl(0, "MultiCursorVisual", { link = "Visual" })
@@ -981,7 +810,6 @@ require("lazy").setup({
 		end,
 	},
 })
--- Faster startup
 vim.loader.enable()
 
 -- Disable some default plugins for better performance
