@@ -53,8 +53,6 @@ vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = tr
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
 vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up", noremap = true, silent = true })
 vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = true, silent = true })
-vim.keymap.set("n", "<Down>", "ddp")
-vim.keymap.set("n", "<Up>", "ddkP")
 vim.keymap.set("n", "<leader>sd", function()
 	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
 	local input = vim.fn.input("Search directories: ")
@@ -197,7 +195,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			vim.keymap.set("n", "<leader>pf", builtin.find_files, { desc = "[P]roject [F]ind file" })
-			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
+			-- vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "[P]roject [S]earch" })
 			vim.keymap.set("n", "<leader>pr", builtin.resume, { desc = "[P]roject search [R]esume" })
@@ -468,34 +466,156 @@ require("lazy").setup({
 	{
 		"echasnovski/mini.nvim",
 		config = function()
-			--
-			-- Examples:
-			--  - va)  - [V]isually select [A]round [)]paren
-			--  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-			--  - ci'  - [C]hange [I]nside [']quote
+			-- mini.ai - enhanced text objects
 			require("mini.ai").setup({ n_lines = 500 })
 
-			-- Add/delete/replace surroundings (brackets, quotes, etc.)
-			--
-			-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-			-- - sd'   - [S]urround [D]elete [']quotes
-			-- - sr)'  - [S]urround [R]eplace [)] [']
+			require("mini.sessions").setup({
+				autoread = false, -- auto read last session on start
+				autosave = true, -- auto save session on exit or switch
+				directory = "~/.config/nvim/session/", -- where session files are saved
+			})
+
+			-- mini.surround - add/delete/change surroundings
 			require("mini.surround").setup()
 
-			-- Simple and easy statusline.
-			--  You could remove this setup call if you don't like it,
-			--  and try some other statusline plugin
+			-- mini.statusline - simple statusline
 			local statusline = require("mini.statusline")
-			-- set use_icons to true if you have a Nerd Font
 			statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-			-- You can configure sections in the statusline by overriding their
-			-- default behavior. For example, here we set the section for
-			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
 			statusline.section_location = function()
 				return "%2l:%-2v"
 			end
+
+			-- mini.pairs - auto pairs like brackets and quotes
+			require("mini.pairs").setup()
+
+			-- mini.comment - commenting with gcc, gc, etc.
+			require("mini.comment").setup()
+
+			-- mini.indentscope - visual indent guides
+			require("mini.indentscope").setup({
+				symbol = "│",
+				options = { try_as_border = true },
+			})
+
+			-- mini.trailspace - trailing whitespace cleaner
+			require("mini.trailspace").setup()
+
+			-- mini.bufremove - better buffer delete
+			require("mini.bufremove").setup()
+			vim.keymap.set("n", "<leader>bd", function()
+				require("mini.bufremove").delete(0, false)
+			end, { desc = "Delete buffer" })
+
+			-- mini.move - move lines/selections with arrow keys
+			require("mini.move").setup({
+				mappings = {
+					line_left = "<Left>",
+					line_right = "<Right>",
+					line_down = "<Down>",
+					line_up = "<Up>",
+				},
+			})
+
+			local find_project_action = function()
+				local hostname = vim.fn.hostname()
+
+				local projects = {}
+
+				if hostname == "ROYWERK" then
+					projects = {}
+				else
+					projects = {
+						"~/Sythir/Hydra/frontend",
+						"~/Sythir/Hydra/platform",
+						"~/Sythir/Hydra/agent",
+						"~/projects/tivoli",
+						"~/projects/gold-tracker",
+						"~/projects/f1-stats",
+					}
+				end
+
+				vim.ui.select(projects, { prompt = "Select project:" }, function(choice)
+					if choice then
+						vim.cmd("cd " .. choice)
+						vim.cmd("bufdo bwipeout")
+						print("Opened project: " .. choice)
+					end
+				end)
+			end
+
+			-- mini.starter - start screen
+			require("mini.starter").setup({
+				header = table.concat({
+
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣶⣿⣿⣿⣿⣷⣶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣯⢀⡈⢻⣿⣿⣿⡏⢀⠈⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⣠⡶⠶⢦⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣾⣧⣿⡛⠙⠛⣷⣾⣼⣿⢿⣿⡅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠹⣷⠾⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠛⢿⣟⠇⠀⠀⠠⡶⣿⣿⣦⢻⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⢻⣧⢹⣿⡀⠀⠀⠀⠀⠀⠀⢸⣿⢻⣿⣿⠀⠀⢠⡆⠀⠄⠀⠀⢸⣿⡟⡇⢻⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠈⣿⡆⣿⣧⠀⠀⠀⠀⠀⢀⣿⡏⣸⣿⣿⡄⠀⠈⠀⠀⠀⠀⠀⠀⣿⠃⣿⣿⣻⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠘⣿⡌⣿⣇⠀⠀⠀⠀⣾⡏⢠⣿⢻⣿⠃⣀⣤⣤⣤⣀⣀⠀⢠⣿⡆⢻⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⢹⣿⢹⣿⡄⠀⠀⠀⣿⣇⣼⡇⣯⣿⡄⠹⠉⠉⠁⠀⠈⠉⣹⣿⣧⣾⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⢻⣇⢻⣳⡀⠀⠀⢈⣻⣿⣿⣿⣿⣿⣶⡶⣶⣷⣶⣶⣶⣿⣿⣿⣿⣿⣥⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠈⢿⡌⣯⢷⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣇⣿⣿⣿⡧⣿⣿⣿⣿⣿⣿⢿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠸⣿⣹⡎⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⢿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⣼⣿⣷⢾⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⣸⠇⢶⣶⡿⢇⠄⣿⣿⣿⣿⣿⣿⡿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⢠⣿⣇⢷⣄⣴⡇⡰⢿⣿⣿⡿⣽⡟⣸⣿⣯⣿⣿⣯⣽⣿⣿⣿⣿⣿⣿⣦⣸⣿⣿⣿⣿⣧⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⣿⣿⣿⣦⢀⡥⠤⠀⠈⣿⣿⣿⣿⣩⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠙⢿⣿⣿⣿⣿⡄⠀⠀⠀",
+					"⠀⠀⠀⢸⣿⣿⣿⣿⡟⢷⠀⢷⠀⠘⣿⣿⢻⣿⣿⣟⣿⣿⣿⣿⣛⣻⣿⣿⣿⣿⡟⢀⣤⣤⡉⢿⣿⣿⣿⠀⠀⠀",
+					"⠀⠀⠀⣿⣿⣿⣿⣿⣧⣈⢳⣦⠼⣶⣿⣿⣿⣿⣿⠿⣿⠿⣿⠿⢿⣿⣿⡿⣿⣿⡇⠘⣿⣷⠇⢸⣿⣿⣿⡇⠀⠀",
+					"⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣏⣉⣠⣴⣶⣿⣿⣾⣿⣴⣾⣶⣶⣷⣾⣿⡿⣾⣾⣿⣷⣶⣿⣿⣶⣿⣿⣿⣿⣷⠀⠀",
+					"⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣻⣹⣸⣯⣾⣿⣿⣿⣿⣿⣿⣿⡇⣿⣟⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀",
+					"⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀",
+					"⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠟⠂",
+					"⠈⠉⠙⠛⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠉⠉⠁⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⣽⣿⣿⣿⣿⣿⣿⣿⠉⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡀⠀⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣶⣾⣿⡉⢤⣍⡓⢶⣶⣦⣤⣉⠒⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣷⡀⠙⣿⣷⣌⠻⣿⣿⣿⣶⣌⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠈⢿⣿⡆⠹⣿⣿⣿⣿⣷⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠹⣿⡄⢻⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⣿⣿⣷⣽⣷⢸⣿⡿⣿⡿⠿⠿⣆⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠐⠾⢭⣭⡼⠟⠃⣤⡆⠘⢟⢺⣦⡀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢛⣥⣶⠾⠿⠛⠿⠶⢬⡁⠀⠀⠘⣃⠤⠤⠤⢍⠻⡄⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⡿⣫⣾⡿⢋⣥⣶⣿⠿⢿⣿⣿⣿⠩⠭⢽⣷⡾⢿⣿⣦⢱⡹⡀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡟⠈⠛⠏⠰⢿⣿⣿⣧⣤⣼⣿⣿⣿⡏⠩⠽⣿⣀⣼⣿⣿⢻⣷⢡⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⢁⣿⣷⣦⡀⠀⠉⠙⠛⠛⠛⠋⠁⠙⢻⡆⠀⢌⣉⠉⠉⠀⠸⣿⣇⠆⠀⠀",
+					-- "⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⠷⣄⢠⣶⣾⣿⣿⣿⣿⣿⠁⠀⠀⢿⣿⣿⣿⣷⠈⣿⠸⡀⠀",
+					-- "⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⠀⣌⡛⠿⣿⣿⠀⠈⢧⢿⣿⡿⠟⠋⠉⣠⣤⣤⣤⣄⠙⢿⣿⠏⣰⣿⡇⢇⠀",
+					-- "⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⣶⣤⣙⠣⢀⠈⠘⠏⠀⠀⢀⣴⢹⡏⢻⡏⣿⣷⣄⠉⢸⣿⣿⣷⠸⡄",
+					-- "⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⠁⣾⣟⣛⠛⠛⠻⠿⠶⠬⠔⠀⣠⡶⠋⠿⠈⠷⠸⠇⠻⠏⠻⠆⣀⢿⣿⣿⡄⢇",
+					-- "⠀⢰⣿⣿⣿⣿⠿⠿⠛⠋⣰⣿⣿⣿⣿⠿⠿⠿⠒⠒⠂⠀⢨⡤⢶⣶⣶⣶⣶⣶⣶⣶⣶⠆⠃⣀⣿⣿⡇⣸",
+					-- "⢀⣿⣿⠿⠋⣡⣤⣶⣾⣿⣿⣿⡟⠁⠀⣠⣤⣴⣶⣶⣾⣿⣿⣷⡈⢿⣿⣿⣿⣿⠿⠛⣡⣴⣿⣿⣿⣿⠟⠁",
+					-- "⣼⠋⢁⣴⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣎⠻⠟⠋⣠⣴⣿⣿⣿⣿⠿⠋⠁⠀⠀",
+					-- "⢿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⣴⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⣠⣾⣿⠿⠿⠟⠋⠁⠀⠀⠀⠀⠀",
+					-- "⠀⠉⠛⠛⠿⠿⠿⢿⣿⣿⣿⣵⣾⣿⣧⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+					-- "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+				}, "\n"),
+				items = {
+					{
+						name = "📂 Find Project",
+						action = find_project_action,
+						section = "Projects",
+					},
+					require("mini.starter").sections.recent_files(5, true),
+					require("mini.starter").sections.sessions(5, true),
+					require("mini.starter").sections.builtin_actions(),
+				},
+			})
+
+			-- open the starter buffer when <leader>ss is pressed
+			vim.keymap.set("n", "<leader>ss", function()
+				require("mini.starter").open()
+			end, { desc = "Open starter buffer" })
+
+			-- close the starter buffer when <leader>sc is pressed
+			vim.keymap.set("n", "<leader>sc", function()
+				require("mini.starter").close()
+			end, { desc = "Close starter buffer" })
 		end,
 	},
 	{
@@ -585,30 +705,25 @@ require("lazy").setup({
 			map("n", "<leader>7", "<Cmd>BufferGoto 7<CR>", opts)
 			map("n", "<leader>8", "<Cmd>BufferGoto 8<CR>", opts)
 			map("n", "<leader>9", "<Cmd>BufferGoto 9<CR>", opts)
-			map("n", "<leader>0", "<Cmd>BufferLast<CR>", opts)
-			map("n", "<A-p>", "<Cmd>BufferPin<CR>", opts)
 			map("n", "<leader>bc", "<Cmd>BufferClose<CR>", { noremap = true, silent = true })
 			map("n", "<leader>ba", "<Cmd>BufferCloseAllButCurrent<CR>", { noremap = true, silent = true })
 			map("n", "<C-p>", "<Cmd>BufferPick<CR>", opts)
 			map("n", "<Space>bb", "<Cmd>BufferOrderByBufferNumber<CR>", opts)
 			map("n", "<Space>bn", "<Cmd>BufferOrderByName<CR>", opts)
 			map("n", "<Space>bd", "<Cmd>BufferOrderByDirectory<CR>", opts)
-			map("n", "<Space>bl", "<Cmd>BufferOrderByLanguage<CR>", opts)
-			map("n", "<Space>bw", "<Cmd>BufferOrderByWindowNumber<CR>", opts)
 		end,
 		config = function()
 			require("barbar").setup({
 				icons = {
 					filetype = {
-						enabled = false,
+						enabled = true,
 					},
 				},
 				offsets = {
 					{
 						filetype = "neo-tree",
-						text = "Neo-tree",
-						highlight = "Directory",
-						text_align = "left",
+						text = "", -- no label, so bufferline is next to Neo-tree
+						padding = 1, -- optional
 					},
 				},
 			})
