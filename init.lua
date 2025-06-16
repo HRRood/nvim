@@ -22,6 +22,6 @@ require("options")
 require("keymaps")
 require("autocommands")
 
-require("plugins/lazy")
+require("plugins")
 
 vim.loader.enable()
