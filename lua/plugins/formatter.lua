@@ -3,14 +3,14 @@ return {
 	event = { "BufWritePre" },
 	cmd = { "ConformInfo" },
 	keys = {
-		{
-			"<leader>fb",
-			function()
-				require("conform").format({ async = true, lsp_format = "fallback" })
-			end,
-			mode = "",
-			desc = "[F]ormat [B]uffer",
-		},
+		-- {
+		-- 	"<leader>fb",
+		-- 	function()
+		-- 		require("conform").format({ async = true, lsp_format = "fallback" })
+		-- 	end,
+		-- 	mode = "",
+		-- 	desc = "[F]ormat [B]uffer",
+		-- },
 	},
 	opts = {
 		notify_on_error = false,
