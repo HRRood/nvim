@@ -8,9 +8,6 @@ vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move window left", noremap = tr
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move window down", noremap = true, silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move window up", noremap = true, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move window right", noremap = true, silent = true })
-vim.keymap.set("n", "<leader>o", "o<Esc>", { desc = "Add blank line below" })
-vim.keymap.set("n", "<leader>O", "O<Esc>", { desc = "Add blank line above" })
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Go to explorer" })
 
 vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = true, silent = true })
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
@@ -24,3 +21,5 @@ vim.keymap.set("n", "<leader>sd", function()
 		require("telescope.builtin").live_grep({ search_dirs = dirs })
 	end
 end, { desc = "Search in a specific directory" })
+
+vim.keymap.set({ "n", "i", "c", "s", "o", "x" }, "<F1>", "<Nop>", { noremap = true, silent = true })
