@@ -38,7 +38,7 @@ return {
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),
 				["<C-f>"] = cmp.mapping.scroll_docs(4),
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
-				["<A-.>"] = cmp.mapping.complete({}),
+				-- ["<A-.>"] = cmp.mapping.complete({}),
 			}),
 			sources = {
 				{

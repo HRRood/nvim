@@ -2,28 +2,18 @@ return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		-- Automatically install LSPs and related tools to stdpath for Neovim
-		-- Mason must be loaded before its dependents so we need to set it up here.
-		-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
 		{ "mason-org/mason.nvim", opts = {} },
 		"mason-org/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 
-		-- Useful status updates for LSP.
 		{ "j-hui/fidget.nvim", opts = {} },
 
-		-- Allows extra capabilities provided by blink.cmp
 		"saghen/blink.cmp",
 	},
 	config = function()
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
-				-- NOTE: Remember that Lua is a real programming language, and as such it is possible
-				-- to define small helper and utility functions so you don't have to repeat yourself.
-				--
-				-- In this case, we create a function that lets us more easily define mappings specific
-				-- for LSP related items. It sets the mode, buffer and description for us each time.
 				local map = function(keys, func, desc, mode)
 					mode = mode or "n"
 					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
@@ -31,10 +21,10 @@ return {
 
 				map("grn", vim.lsp.buf.rename, "[R]e[n]ame", { "n", "x" })
 
-				map("<C-.>", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+				-- map("<C-.>", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
 				-- Alt+Enter to show code actions (like in WebStorm)
-				map("<C-CR>", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
+				map("<A-.>", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
 
 				-- Find references for the word under your cursor.
 				-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")

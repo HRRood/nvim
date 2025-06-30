@@ -18,7 +18,7 @@ return {
 		require("mini.pairs").setup()
 
 		-- mini.comment - commenting with gcc, gc, etc.
-		require("mini.comment").setup()
+		-- require("mini.comment").setup()
 
 		-- mini.indentscope - visual indent guides
 		require("mini.indentscope").setup({
