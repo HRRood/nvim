@@ -2,13 +2,7 @@ return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false,
-	---@type snacks.Config
 	opts = {
-		-- your configuration comes here
-		-- or leave it empty to use the default settings
-		-- refer to the configuration section below
-		animate = { enabled = false },
-		bigfile = { enabled = true },
 		dashboard = {
 			enabled = true,
 			sections = {
@@ -21,16 +15,7 @@ return {
 				},
 			},
 		},
-		indent = { enabled = true },
-		image = { enabled = true },
-		-- input = { enabled = true },
 		picker = { enabled = true },
-		notifier = { enabled = true },
-		quickfile = { enabled = true },
-		scope = { enabled = true },
-		scroll = { enabled = false },
-		statuscolumn = { enabled = false },
-		words = { enabled = false },
 	},
 	keys = {
 		{
@@ -60,13 +45,6 @@ return {
 				Snacks.picker.command_history()
 			end,
 			desc = "Command History",
-		},
-		{
-			"<leader>n",
-			function()
-				Snacks.picker.notifications()
-			end,
-			desc = "Notification History",
 		},
 		{
 			"<leader>e",
@@ -185,39 +163,11 @@ return {
 			desc = "Search History",
 		},
 		{
-			"<leader>sC",
-			function()
-				Snacks.picker.commands()
-			end,
-			desc = "Commands",
-		},
-		{
-			"<leader>sd",
-			function()
-				Snacks.picker.diagnostics()
-			end,
-			desc = "Diagnostics",
-		},
-		{
-			"<leader>sD",
-			function()
-				Snacks.picker.diagnostics_buffer()
-			end,
-			desc = "Buffer Diagnostics",
-		},
-		{
 			"<leader>sj",
 			function()
 				Snacks.picker.jumps()
 			end,
 			desc = "Jumps",
-		},
-		{
-			"<leader>sk",
-			function()
-				Snacks.picker.keymaps()
-			end,
-			desc = "Keymaps",
 		},
 		{
 			"<leader>sl",
@@ -241,13 +191,6 @@ return {
 			desc = "Man Pages",
 		},
 		{
-			"<leader>sp",
-			function()
-				Snacks.picker.lazy()
-			end,
-			desc = "Search for Plugin Spec",
-		},
-		{
 			"<leader>sq",
 			function()
 				Snacks.picker.qflist()
@@ -267,13 +210,6 @@ return {
 				Snacks.picker.undo()
 			end,
 			desc = "Undo History",
-		},
-		{
-			"<leader>uC",
-			function()
-				Snacks.picker.colorschemes()
-			end,
-			desc = "Colorschemes",
 		},
 		-- LSP
 		{

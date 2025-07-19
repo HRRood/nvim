@@ -2,10 +2,7 @@ return {
 	"echasnovski/mini.nvim",
 	config = function()
 		-- mini.ai - enhanced text objects
-		require("mini.ai").setup({ n_lines = 500 })
-
-		-- mini.surround - add/delete/change surroundings
-		require("mini.surround").setup()
+		-- require("mini.ai").setup({ n_lines = 500 })
 
 		-- mini.statusline - simple statusline
 		local statusline = require("mini.statusline")
@@ -13,12 +10,8 @@ return {
 		statusline.section_location = function()
 			return "%2l:%-2v"
 		end
-
 		-- mini.pairs - auto pairs like brackets and quotes
 		require("mini.pairs").setup()
-
-		-- mini.comment - commenting with gcc, gc, etc.
-		-- require("mini.comment").setup()
 
 		-- mini.indentscope - visual indent guides
 		require("mini.indentscope").setup({
