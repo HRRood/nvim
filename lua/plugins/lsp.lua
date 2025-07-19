@@ -24,7 +24,7 @@ return {
 				-- map("<C-.>", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
 				-- Alt+Enter to show code actions (like in WebStorm)
-				map("<A-.>", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
+				map("<leader>.", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
 
 				-- Find references for the word under your cursor.
 				-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")

@@ -32,10 +32,10 @@ return {
 
 		vim.keymap.set("n", "<A-a>", function()
 			harpoon:list():add()
-		end)
+		end, { desc = "Add harpoon", noremap = true })
 		vim.keymap.set("n", "<A-e>", function()
 			harpoon.ui:toggle_quick_menu(harpoon:list())
-		end)
+		end, { desc = "Toggle harpoon quick menu", noremap = true })
 
 		vim.keymap.set("n", "<A-h>", function()
 			harpoon:list():select(1)
