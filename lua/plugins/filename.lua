@@ -1,10 +1,17 @@
 return {
 	"b0o/incline.nvim",
-	dependencies = { "catppuccin/nvim" },
+	dependencies = { "sainnhe/sonokai" },
 	event = "BufReadPre",
 	priority = 1200,
 	config = function()
-		local colors = require("catppuccin.palettes").get_palette("mocha")
+		-- Define colors matching Sonokai theme (you can tweak these to better match your variant)
+		local colors = {
+			mauve = "#a9b1d6", -- e.g., purple-ish (used as background)
+			base = "#1a1b26", -- dark background
+			surface0 = "#2a2e36", -- inactive background
+			subtext0 = "#7aa2f7", -- light blue-ish (used for text in inactive tab)
+		}
+
 		require("incline").setup({
 			highlight = {
 				groups = {
