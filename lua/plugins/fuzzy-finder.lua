@@ -1,79 +1,164 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	event = "VimEnter",
-	branch = "0.1.x",
 	dependencies = {
-		"nvim-lua/plenary.nvim",
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "make",
-			cond = function()
-				return vim.fn.executable("make") == 1
-			end,
 		},
-		{ "nvim-telescope/telescope-ui-select.nvim" },
-		{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+		"nvim-telescope/telescope-file-browser.nvim",
+	},
+	keys = {
+		{
+			"<leader>fP",
+			function()
+				require("telescope.builtin").find_files({
+					cwd = require("lazy.core.config").options.root,
+				})
+			end,
+			desc = "Find Plugin File",
+		},
+		{
+			";f",
+			function()
+				require("telescope.builtin").find_files({
+					no_ignore = false,
+					hidden = true,
+				})
+			end,
+			desc = "[F]ind [F]ile",
+		},
+		{
+			";r",
+			function()
+				require("telescope.builtin").live_grep({})
+			end,
+			desc = "Live Grep",
+		},
+		{
+			"\\\\",
+			function()
+				require("telescope.builtin").buffers()
+			end,
+			desc = "Lists open buffers",
+		},
+		{
+			";t",
+			function()
+				require("telescope.builtin").help_tags()
+			end,
+			desc = "Lists available help tags",
+		},
+		{
+			";;",
+			function()
+				require("telescope.builtin").resume()
+			end,
+			desc = "Resume last Telescope picker",
+		},
+		{
+			";e",
+			function()
+				require("telescope.builtin").diagnostics()
+			end,
+			desc = "Show diagnostics",
+		},
+		{
+			";s",
+			function()
+				require("telescope.builtin").treesitter()
+			end,
+			desc = "List symbols from Treesitter",
+		},
+		{
+			";c",
+			function()
+				require("telescope.builtin").lsp_incoming_calls()
+			end,
+			desc = "LSP incoming calls",
+		},
+		{
+			"sf",
+			function()
+				local telescope = require("telescope")
+
+				local function telescope_buffer_dir()
+					return vim.fn.expand("%:p:h")
+				end
+
+				telescope.extensions.file_browser.file_browser({
+					path = "%:p:h",
+					cwd = telescope_buffer_dir(),
+					respect_gitignore = false,
+					hidden = true,
+					grouped = true,
+					previewer = false,
+					initial_mode = "normal",
+					layout_config = { height = 40 },
+				})
+			end,
+			desc = "Open file browser at buffer path",
+		},
 	},
 	config = function()
-		require("telescope").setup({
+		local telescope = require("telescope")
+		local actions = require("telescope.actions")
+		local fb_actions = require("telescope").extensions.file_browser.actions
+
+		telescope.setup({
 			defaults = {
-				prompt_prefix = " ",
-				selection_caret = " ",
-				vimgrep_arguments = {
-					"rg",
-					"--color=never",
-					"--no-heading",
-					"--with-filename",
-					"--line-number", -- <--- THIS IS CRUCIAL
-					"--column", -- <--- THIS IS ALSO VERY HELPFUL
-					"--smart-case",
-					"--trim", -- Good for clean parsing
-				},
-				-- Add mappings to handle Ctrl+V properly
+				wrap_results = true,
+				layout_strategy = "vertical",
+				layout_config = { prompt_position = "bottom" },
+				sorting_strategy = "ascending",
+				winblend = 0,
 				mappings = {
+					n = {},
 					i = {
-						["<C-v>"] = require("telescope.actions").select_vertical,
-						["<C-x>"] = require("telescope.actions").select_horizontal,
-						["<C-t>"] = require("telescope.actions").select_tab,
+
+						["<C-j>"] = require("telescope.actions").move_selection_next,
+						["<C-k>"] = require("telescope.actions").move_selection_previous,
 					},
-					n = {
-						["<C-v>"] = require("telescope.actions").select_vertical,
-						["<C-x>"] = require("telescope.actions").select_horizontal,
-						["<C-t>"] = require("telescope.actions").select_tab,
+				},
+			},
+			pickers = {
+				diagnostics = {
+					theme = "ivy",
+					initial_mode = "normal",
+					layout_config = {
+						preview_cutoff = 9999,
 					},
 				},
 			},
 			extensions = {
-				["ui-select"] = {
-					require("telescope.themes").get_dropdown(),
+				file_browser = {
+					theme = "dropdown",
+					hijack_netrw = true,
+					mappings = {
+						n = {
+							["N"] = fb_actions.create,
+							["h"] = fb_actions.goto_parent_dir,
+							["/"] = function()
+								vim.cmd("startinsert")
+							end,
+							["<C-u>"] = function(prompt_bufnr)
+								for _ = 1, 10 do
+									actions.move_selection_previous(prompt_bufnr)
+								end
+							end,
+							["<C-d>"] = function(prompt_bufnr)
+								for _ = 1, 10 do
+									actions.move_selection_next(prompt_bufnr)
+								end
+							end,
+							["<PageUp>"] = actions.preview_scrolling_up,
+							["<PageDown>"] = actions.preview_scrolling_down,
+						},
+					},
 				},
 			},
 		})
-		pcall(require("telescope").load_extension, "fzf")
-		pcall(require("telescope").load_extension, "ui-select")
-		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-		vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-		-- vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]ile" })
-		-- vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-		vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-		-- vim.keymap.set("n", "<leader>ps", builtin.live_grep, { desc = "[P]roject [S]earch" })
-		-- vim.keymap.set("n", "<leader>pr", builtin.resume, { desc = "[P]roject search [R]esume" })
-		-- vim.keymap.set("n", "<leader>sr", ":%s//<Left>", { desc = "[S]earch [R]eplace" })
-		vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-		-- vim.keymap.set("n", "<leader>,", builtin.buffers, { desc = "[ ] Find existing buffers" })
-		vim.keymap.set("n", "<leader>sb", function()
-			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-				winblend = 20,
-				previewer = true,
-				prompt_title = "Fuzzily Search in Current Buffer",
-			}))
-		end, { desc = "Fuzzily [S]earch in current [B]uffer" })
-		vim.keymap.set("n", "<leader>so", function()
-			builtin.live_grep({
-				grep_open_files = true,
-				prompt_title = "Live Grep in Open Files",
-			})
-		end, { desc = "[S]earch in [O]pen Files" })
+
+		telescope.load_extension("fzf")
+		telescope.load_extension("file_browser")
 	end,
 }

@@ -23,3 +23,6 @@ vim.keymap.set("n", "<leader>sd", function()
 end, { desc = "Search in a specific directory" })
 
 vim.keymap.set({ "n", "i", "c", "s", "o", "x" }, "<F1>", "<Nop>", { noremap = true, silent = true })
+-- Increment/decrement
+vim.keymap.set("n", "+", "<C-a>", { noremap = true, silent = true })
+vim.keymap.set("n", "-", "<C-x>", { noremap = true, silent = true })

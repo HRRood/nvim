@@ -21,27 +21,31 @@ return {
 
 				map("grn", vim.lsp.buf.rename, "[R]e[n]ame", { "n", "x" })
 
-				-- map("<C-.>", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-
 				-- Alt+Enter to show code actions (like in WebStorm)
 				map("<leader>.", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
 
 				-- Find references for the word under your cursor.
-				-- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+
+				map("gr", function()
+					require("telescope.builtin").lsp_references({
+						default_text = "", -- 👈 disables auto-prefill
+						initial_mode = "normal", -- optional: avoid insert mode
+					})
+				end, "[G]oto [R]eferences")
 
 				-- Jump to the implementation of the word under your cursor.
 				--  Useful when your language has ways of declaring types without an actual implementation.
-				-- map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+				map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
 				-- Jump to the definition of the word under your cursor.
 				--  This is where a variable was first declared, or where a function is defined, etc.
 				--  To jump back, press <C-t>.
-				-- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+				map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
-				-- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 				-- Fuzzy find all the symbols in your current document.
 				--  Symbols are things like variables, functions, types, etc.
-				-- map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
+				map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
 
 				-- Fuzzy find all the symbols in your current workspace.
 				--  Similar to document symbols, except searches over your entire project.
@@ -52,11 +56,6 @@ return {
 				--  the definition of its *type*, not where it was *defined*.
 				map("gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
 
-				-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-				---@param client vim.lsp.Client
-				---@param method vim.lsp.protocol.Method
-				---@param bufnr? integer some lsp support methods only in specific files
-				---@return boolean
 				local function client_supports_method(client, method, bufnr)
 					if vim.fn.has("nvim-0.11") == 1 then
 						return client:supports_method(method, bufnr)
@@ -182,6 +181,9 @@ return {
 					Lua = {
 						completion = {
 							callSnippet = "Replace",
+						},
+						diagnostics = {
+							globals = { "vim" },
 						},
 						-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
 						-- diagnostics = { disable = { 'missing-fields' } },

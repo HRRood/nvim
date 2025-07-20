@@ -2,6 +2,7 @@ return {
 	"folke/which-key.nvim",
 	event = "VimEnter",
 	opts = {
+		preset = "helix",
 		icons = {
 			mappings = vim.g.have_nerd_font,
 			keys = vim.g.have_nerd_font and {} or {
@@ -36,13 +37,13 @@ return {
 			},
 		},
 		spec = {
-			{ "<leader>c", group = "[C]ode", mode = { "n", "x" } },
-			{ "<leader>b", group = "[B]uffer", mode = { "n", "x" } },
-			{ "<leader>d", group = "[D]ocument" },
-			{ "<leader>r", group = "[R]ename" },
-			{ "<leader>w", group = "[W]orkspace" },
-			{ "<leader>t", group = "[T]oggle" },
-			{ "<leader>p", group = "[P]roject" },
+			-- { "<leader>c", group = "[C]ode", mode = { "n", "x" } },
+			-- { "<leader>b", group = "[B]uffer", mode = { "n", "x" } },
+			-- { "<leader>d", group = "[D]ocument" },
+			-- { "<leader>r", group = "[R]ename" },
+			-- { "<leader>w", group = "[W]orkspace" },
+			-- { "<leader>t", group = "[T]oggle" },
+			-- { "<leader>p", group = "[P]roject" },
 		},
 	},
 }
