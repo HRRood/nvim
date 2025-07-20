@@ -71,6 +71,20 @@ return {
 				{ section = "startup" },
 			},
 		},
+		projects = {
+			-- Specify directories to search for projects
+			paths = {
+				"~/projects", -- Look in projects directory
+				"C:/projects", -- Look in C:/projects
+			},
+			-- Pattern matching for project detection
+			patterns = {
+				".git",
+				"package.json",
+			},
+			-- Maximum depth to search
+			depth = 2,
+		},
 	},
 	keys = {
 		-- {
