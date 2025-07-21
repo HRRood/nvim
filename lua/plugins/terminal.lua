@@ -16,7 +16,7 @@ return {
 			start_in_insert = true,
 			insert_mappings = true, -- Allow terminal to be opened using the specified mapping in insert mode
 			persist_size = true,
-			direction = "float", -- Open terminal as a floating window
+			-- direction = "float", -- Open terminal as a floating window
 			close_on_exit = true, -- Close the terminal window when the process exits
 			shell = vim.o.shell, -- Use the default shell
 			float_opts = {
