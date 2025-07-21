@@ -42,6 +42,7 @@ return {
 			{ "<leader>e", group = "File explorer", icon = "" },
 			{ "<leader>f", group = "Find", icon = "" },
 			{ "<leader>g", group = "Git", icon = "" },
+			{ "<leader>gC", group = "Git Checkout", icon = "" },
 			{ "<leader>h", group = "Hunk", icon = "" },
 			{ "<leader>s", group = "Search", icon = "" },
 			{ "<leader>t", group = "Toggle", icon = "" },
