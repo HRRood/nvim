@@ -18,7 +18,7 @@ return {
 			desc = "Find Plugin File",
 		},
 		{
-			";f",
+			"<leader>ff",
 			function()
 				require("telescope.builtin").find_files({
 					no_ignore = false,
@@ -28,7 +28,7 @@ return {
 			desc = "[F]ind [F]ile",
 		},
 		{
-			";r",
+			"<leader>fr",
 			function()
 				require("telescope.builtin").live_grep({})
 			end,
@@ -49,28 +49,28 @@ return {
 			desc = "Lists available help tags",
 		},
 		{
-			";;",
+			"<leader>;;",
 			function()
 				require("telescope.builtin").resume()
 			end,
 			desc = "Resume last Telescope picker",
 		},
 		{
-			";e",
+			"<leader>fe",
 			function()
 				require("telescope.builtin").diagnostics()
 			end,
 			desc = "Show diagnostics",
 		},
 		{
-			";s",
+			"<leader>fs",
 			function()
 				require("telescope.builtin").treesitter()
 			end,
 			desc = "List symbols from Treesitter",
 		},
 		{
-			";c",
+			"<leader>fc",
 			function()
 				require("telescope.builtin").lsp_incoming_calls()
 			end,
