@@ -1,28 +1,20 @@
+-- Add this to your Lazy plugin spec list
 return {
 	"Fildo7525/pretty_hover",
-	event = "LspAttach",
-	opts = {},
-	config = function()
-		require("pretty_hover").setup({
-			border = "rounded",
-			max_width = 80,
-			max_height = 20,
-			padding = 2,
-			highlight_group = "NormalFloat",
-			transparency = 10,
-		})
-		vim.api.nvim_set_keymap(
-			"n",
-			"K",
-			"<cmd>lua require('pretty_hover').hover()<CR>",
-			{ noremap = true, silent = true, desc = "Show hover information" }
-		)
-		-- add keybind for Close hover information
-		vim.api.nvim_set_keymap(
-			"n",
-			"<leader>L",
-			"<cmd>lua require('pretty_hover').close()<CR>",
-			{ noremap = true, silent = true, desc = "Close hover information" }
-		)
+	event = "LspAttach", -- Load when LSP attaches
+	opts = {
+		border = "rounded", -- or "single", "double", "solid", etc.
+		max_width = 100,
+		max_height = 200,
+		padding = 2,
+		close_events = { "CursorMoved", "BufHidden", "InsertCharPre" },
+	},
+	config = function(_, opts)
+		require("pretty_hover").setup(opts)
+
+		-- Example keybinding for triggering pretty_hover
+		vim.keymap.set("n", "K", function()
+			require("pretty_hover").hover()
+		end, { desc = "Pretty Hover", noremap = true, silent = true })
 	end,
 }
