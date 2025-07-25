@@ -314,6 +314,8 @@ return {
 				find_files = {
 					theme = "dropdown",
 					previewer = false,
+					layout_config = nil,
+					layout_strategy = nil,
 					find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
 				},
 				live_grep = {
@@ -415,7 +417,7 @@ return {
 		})
 
 		-- Load extensions
-		telescope.load_extension("fzf")
+		-- telescope.load_extension("fzf")
 		telescope.load_extension("file_browser")
 		telescope.load_extension("ui-select")
 		telescope.load_extension("live_grep_args")
