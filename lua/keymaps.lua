@@ -13,6 +13,7 @@ vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move cursor left", noremap = tr
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move cursor down", noremap = true, silent = true })
 vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move cursor up", noremap = true, silent = true })
 vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move cursor right", noremap = true, silent = true })
+vim.keymap.set("n", "<Esc><Esc>", ":nohlsearch<CR>", { desc = "Clear search highlight" })
 vim.keymap.set("n", "<leader>sd", function()
 	vim.keymap.set("n", "P", '"_dhp', { noremap = true, silent = true, desc = "Paste without copying selection" })
 	local input = vim.fn.input("Search directories: ")

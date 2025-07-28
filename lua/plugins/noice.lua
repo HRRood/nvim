@@ -361,6 +361,10 @@ return {
 		-- Setup noice with enhanced options
 		require("noice").setup(opts)
 
+		require("notify").setup({
+			background_colour = "#1e1e2e",
+		})
+
 		-- Set up additional integrations if available
 		local has_telescope = pcall(require, "telescope")
 		if has_telescope then
@@ -399,4 +403,3 @@ return {
 		})
 	end,
 }
-

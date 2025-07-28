@@ -220,6 +220,23 @@ return {
 		local actions = require("telescope.actions")
 		local fb_actions = require("telescope").extensions.file_browser.actions
 
+		-- Prompt input line
+
+		-- Prompt window (darker)
+		vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "#2f383e" }) -- dark grayish green
+		vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = "#d699b6", bg = "#2f383e" }) -- muted pink
+		vim.api.nvim_set_hl(0, "TelescopePromptTitle", { fg = "#d699b6", bg = "#2f383e", bold = true })
+
+		-- Results window
+		vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#323d43" }) -- soft background
+		vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = "#d699b6", bg = "#323d43" })
+		vim.api.nvim_set_hl(0, "TelescopeResultsTitle", { fg = "#a7c080", bg = "#323d43", bold = true }) -- greenish
+
+		-- Preview window
+		vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "#323d43" })
+		vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = "#d699b6", bg = "#323d43" })
+		vim.api.nvim_set_hl(0, "TelescopePreviewTitle", { fg = "#7fbbb3", bg = "#323d43", bold = true }) -- teal
+
 		telescope.setup({
 			defaults = {
 				-- Enhanced sorting and filtering
@@ -316,11 +333,45 @@ return {
 					previewer = false,
 					layout_config = nil,
 					layout_strategy = nil,
-					find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+					find_command = {
+						"rg",
+						"--files",
+						"--hidden",
+						"--glob",
+						"!**/.git/*",
+						"--glob",
+						"!**/node_modules/*",
+						"--glob",
+						"!**/dist/*",
+						"--glob",
+						"!**/build/*",
+						"--glob",
+						"!**/.next/*",
+						"--glob",
+						"!**/out/*",
+						"--glob",
+						"!**/coverage/*",
+					},
 				},
 				live_grep = {
-					additional_args = function(opts)
-						return { "--hidden" }
+					additional_args = function()
+						return {
+							"--hidden",
+							"--glob",
+							"!**/.git/*",
+							"--glob",
+							"!**/node_modules/*",
+							"--glob",
+							"!**/dist/*",
+							"--glob",
+							"!**/build/*",
+							"--glob",
+							"!**/.next/*",
+							"--glob",
+							"!**/out/*",
+							"--glob",
+							"!**/coverage/*",
+						}
 					end,
 				},
 				grep_string = {
