@@ -24,7 +24,7 @@ vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.termguicolors = true
-vim.opt.title = true
+-- vim.opt.title = true
 
 if vim.fn.has("win32") == 1 then
 	require("utils.windows").setup_options()

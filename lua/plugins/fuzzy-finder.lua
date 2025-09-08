@@ -11,15 +11,15 @@ return {
 	},
 	keys = {
 		-- Your existing keymaps
-		{
-			"<leader>fP",
-			function()
-				require("telescope.builtin").find_files({
-					cwd = require("lazy.core.config").options.root,
-				})
-			end,
-			desc = "Find Plugin File",
-		},
+		-- {
+		-- 	"<leader>fP",
+		-- 	function()
+		-- 		require("telescope.builtin").find_files({
+		-- 			cwd = require("lazy.core.config").options.root,
+		-- 		})
+		-- 	end,
+		-- 	desc = "Find Plugin File",
+		-- },
 		{
 			"<leader>ff",
 			function()
@@ -254,13 +254,13 @@ return {
 				},
 
 				-- Better preview and layout
-				wrap_results = true,
-				layout_strategy = "vertical",
+				-- wrap_results = true,
+				layout_strategy = "horizontal",
 				layout_config = {
-					prompt_position = "bottom",
-					preview_height = 0.5,
-					width = 0.9,
-					height = 0.9,
+					prompt_position = "top",
+					-- preview_height = 0.5,
+					-- width = 0.9,
+					-- height = 0.9,
 				},
 				sorting_strategy = "ascending",
 				winblend = 0,
@@ -319,12 +319,12 @@ return {
 				-- Better performance
 				dynamic_preview_title = true,
 				results_title = false,
-				border = true,
-				borderchars = {
-					prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-					results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-					preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-				},
+				-- border = true,
+				-- borderchars = {
+				-- 	prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
+				-- 	results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
+				-- 	preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+				-- },
 			},
 
 			pickers = {
