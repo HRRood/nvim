@@ -24,6 +24,20 @@ vim.keymap.set("n", "<leader>sd", function()
 end, { desc = "Search in a specific directory" })
 
 vim.keymap.set({ "n", "i", "c", "s", "o", "x" }, "<F1>", "<Nop>", { noremap = true, silent = true })
--- Increment/decrement
-vim.keymap.set("n", "+", "<C-a>", { noremap = true, silent = true })
-vim.keymap.set("n", "-", "<C-x>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>ra", function()
+	-- Prompt for search term
+	vim.ui.input({ prompt = "Search for: " }, function(search)
+		if not search or search == "" then
+			return
+		end
+		-- Prompt for replacement term
+		vim.ui.input({ prompt = "Replace with: " }, function(replace)
+			if replace == nil then
+				return
+			end
+			-- Execute the search and replace for the whole file
+			vim.cmd(string.format("%%s/%s/%s/g", search, replace))
+		end)
+	end)
+end, { noremap = true, silent = true, desc = "Replace all" })

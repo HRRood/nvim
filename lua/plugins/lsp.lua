@@ -2,12 +2,13 @@ return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		{ "mason-org/mason.nvim", opts = {} },
+		{
+			"mason-org/mason.nvim",
+			opts = {},
+		},
 		"mason-org/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-
 		{ "j-hui/fidget.nvim", opts = {} },
-
 		"saghen/blink.cmp",
 	},
 	config = function()
@@ -23,8 +24,6 @@ return {
 
 				-- Alt+Enter to show code actions (like in WebStorm)
 				map("<leader>.", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
-
-				-- Find references for the word under your cursor.
 
 				map("gr", function()
 					require("telescope.builtin").lsp_references({
