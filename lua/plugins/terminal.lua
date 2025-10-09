@@ -23,8 +23,6 @@ return {
 			shell = vim.o.shell,
 			float_opts = {
 				border = "curved",
-				width = 120,
-				height = 30,
 				winblend = 3,
 				highlights = {
 					border = "ToggleTermBorder",

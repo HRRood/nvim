@@ -1,6 +1,3 @@
--- This is a complete configuration for the oil.nvim plugin.
--- It is designed to be used with the lazy.nvim plugin manager.
-
 return {
 	"stevearc/oil.nvim",
 	version = "2.*",

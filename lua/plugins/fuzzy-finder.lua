@@ -26,6 +26,13 @@ return {
 				require("telescope.builtin").find_files({
 					no_ignore = false,
 					hidden = true,
+					previewer = true,
+					layout_strategy = "horizontal",
+					layout_config = {
+						preview_width = 0.6,
+						width = 0.9,
+						height = 0.9,
+					},
 				})
 			end,
 			desc = "[F]ind [F]ile",
@@ -329,10 +336,13 @@ return {
 
 			pickers = {
 				find_files = {
-					theme = "dropdown",
-					previewer = false,
-					layout_config = nil,
-					layout_strategy = nil,
+					previewer = true,
+					layout_strategy = "horizontal",
+					layout_config = {
+						preview_width = 0.6,
+						width = 0.9,
+						height = 0.9,
+					},
 					find_command = {
 						"rg",
 						"--files",
