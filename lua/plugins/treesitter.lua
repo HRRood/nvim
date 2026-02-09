@@ -4,20 +4,24 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"lua",
-					"vim",
-					"vimdoc",
-					"query",
-					"javascript",
-					"typescript",
-					"css",
-					"gitignore",
-					"http",
-					"json",
-					"scss",
-					"sql",
-				},
+			ensure_installed = {
+				"lua",
+				"vim",
+				"vimdoc",
+				"query",
+				"javascript",
+				"typescript",
+				"tsx",
+				"jsdoc",
+				"css",
+				"gitignore",
+				"http",
+				"json",
+				"json5",
+				"scss",
+				"sql",
+				"html",
+			},
 				sync_install = false,
 				auto_install = true,
 				ignore_install = { "some_problematic_parser" },
@@ -65,7 +69,10 @@ return {
 				},
 
 				-- Add this line
-				modules = {}, -- This field is explicitly required by TSConfig
+				modules = {
+				highlight = { enable = true },
+				indent = { enable = true },
+			}, -- This field is explicitly required by TSConfig
 			})
 		end,
 	},
