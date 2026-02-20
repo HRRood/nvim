@@ -24,6 +24,7 @@ return {
 			"<leader>ff",
 			function()
 				require("telescope.builtin").find_files({
+					cwd = vim.fn.getcwd(),
 					no_ignore = false,
 					hidden = true,
 					previewer = true,

@@ -30,9 +30,16 @@ return {
 		formatters_by_ft = {
 			lua = { "stylua" },
 			javascript = { "prettier" },
+			javascriptreact = { "prettier" },
 			typescript = { "prettier" },
+			typescriptreact = { "prettier" },
 			css = { "prettier" },
+			scss = { "prettier" },
 			html = { "prettier" },
+			json = { "prettier" },
+			jsonc = { "prettier" },
+			markdown = { "prettier" },
+			-- cs = { "csharpier" },
 		},
 	},
 }

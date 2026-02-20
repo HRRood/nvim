@@ -1,6 +1,7 @@
 return {
 	"coffebar/neovim-project",
 	opts = {
+		last_session_on_startup = false,
 		projects = {
 			-- Define your project roots here. Glob patterns are supported.
 			"~/code/*",

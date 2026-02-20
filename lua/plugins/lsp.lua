@@ -165,36 +165,50 @@ return {
 			-- rust_analyzer = {},
 			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			--
-		ts_ls = {
-			settings = {
-				typescript = {
-					inlayHints = {
-						includeInlayParameterNameHints = "all",
-						includeInlayFunctionParameterTypeHints = true,
-						includeInlayVariableTypeHints = true,
-						includeInlayPropertyDeclarationTypeHints = true,
-						includeInlayFunctionLikeReturnTypeHints = true,
-						includeInlayEnumMemberValueHints = true,
+			ts_ls = {
+				settings = {
+					typescript = {
+						inlayHints = {
+							includeInlayParameterNameHints = "all",
+							includeInlayFunctionParameterTypeHints = true,
+							includeInlayVariableTypeHints = true,
+							includeInlayPropertyDeclarationTypeHints = true,
+							includeInlayFunctionLikeReturnTypeHints = true,
+							includeInlayEnumMemberValueHints = true,
+						},
 					},
-				},
-				javascript = {
-					inlayHints = {
-						includeInlayParameterNameHints = "all",
-						includeInlayFunctionParameterTypeHints = true,
-						includeInlayVariableTypeHints = true,
-						includeInlayPropertyDeclarationTypeHints = true,
-						includeInlayFunctionLikeReturnTypeHints = true,
-						includeInlayEnumMemberValueHints = true,
+					javascript = {
+						inlayHints = {
+							includeInlayParameterNameHints = "all",
+							includeInlayFunctionParameterTypeHints = true,
+							includeInlayVariableTypeHints = true,
+							includeInlayPropertyDeclarationTypeHints = true,
+							includeInlayFunctionLikeReturnTypeHints = true,
+							includeInlayEnumMemberValueHints = true,
+						},
 					},
 				},
 			},
-		},
-		eslint = {},
-		biome = {},
-		tailwindcss = {},
-		cssls = {},
-		html = {},
-		prismals = {},
+			eslint = {},
+			biome = {},
+			tailwindcss = {},
+			cssls = {},
+			html = {},
+			prismals = {},
+
+			omnisharp = {
+				cmd = { "omnisharp" },
+				settings = {
+					FormattingOptions = {
+						EnableEditorConfigSupport = true,
+						OrganizeImports = true,
+					},
+					RoslynExtensionsOptions = {
+						EnableAnalyzersSupport = true,
+						EnableImportCompletion = true,
+					},
+				},
+			},
 
 			lua_ls = {
 				-- cmd = { ... },
@@ -233,6 +247,7 @@ return {
 			"stylua", -- Used to format Lua code
 			"prettier", -- Used to format web files
 			"eslint_d", -- Fast ESLint daemon
+			-- "csharpier", -- C# formatter
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
