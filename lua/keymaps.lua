@@ -41,3 +41,31 @@ vim.keymap.set("n", "<leader>ra", function()
 		end)
 	end)
 end, { noremap = true, silent = true, desc = "Replace all" })
+
+vim.keymap.set("n", "<leader>rq", function()
+	vim.ui.input({ prompt = "Search for: " }, function(search)
+		if not search or search == "" then
+			return
+		end
+		vim.ui.input({ prompt = "Replace with: " }, function(replace)
+			if replace == nil then
+				return
+			end
+			vim.cmd(string.format("cdo s/%s/%s/ge | update", search, replace))
+		end)
+	end)
+end, { noremap = true, silent = true, desc = "Replace all in quickfix (auto)" })
+
+vim.keymap.set("n", "<leader>rQ", function()
+	vim.ui.input({ prompt = "Search for: " }, function(search)
+		if not search or search == "" then
+			return
+		end
+		vim.ui.input({ prompt = "Replace with: " }, function(replace)
+			if replace == nil then
+				return
+			end
+			vim.cmd(string.format("cdo s/%s/%s/gc | update", search, replace))
+		end)
+	end)
+end, { noremap = true, silent = true, desc = "Replace in quickfix (confirm each)" })
