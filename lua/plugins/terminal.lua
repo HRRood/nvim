@@ -2,6 +2,11 @@ return {
 	"akinsho/toggleterm.nvim",
 	version = "*",
 	config = function()
+		local shell_cmd = vim.o.shell
+		if vim.fn.has("win32") == 1 then
+			shell_cmd = "powershell -NoLogo -NoProfile -NoExit -Command \". $env:USERPROFILE\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1\""
+		end
+
 		require("toggleterm").setup({
 			size = function(term)
 				if term.direction == "horizontal" then
@@ -20,7 +25,7 @@ return {
 			persist_size = true,
 			direction = "float",
 			close_on_exit = true,
-			shell = vim.o.shell,
+			shell = shell_cmd,
 			float_opts = {
 				border = "curved",
 				winblend = 3,
