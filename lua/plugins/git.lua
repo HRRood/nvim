@@ -85,59 +85,6 @@ return {
 		},
 	},
 
-	-- Fugitive - Comprehensive Git wrapper
-
-	{
-		"tpope/vim-fugitive",
-		cmd = {
-			"G",
-			"Git",
-			"Gdiffsplit",
-			"Gread",
-			"Gwrite",
-			"Ggrep",
-			"GMove",
-			"GDelete",
-			"GBrowse",
-			"GRemove",
-			"GRename",
-			"Glgrep",
-			"Gedit",
-			"Gstatus",
-		},
-		ft = { "fugitive" },
-		keys = {
-			-- Algemene Git commands
-			{ "<leader>gs", "<cmd>Git<cr>", desc = "Git status (Fugitive)" },
-			{ "<leader>gc", "<cmd>Git commit<cr>", desc = "Git commit" },
-			{ "<leader>ga", "<cmd>Git add .<cr>", desc = "Git add all" },
-			{ "<leader>gp", "<cmd>Git push<cr>", desc = "Git push" },
-			{ "<leader>gP", "<cmd>Git pull<cr>", desc = "Git pull" },
-			{ "<leader>gb", "<cmd>Git blame<cr>", desc = "Git blame" },
-			{ "<leader>gl", "<cmd>Git log<cr>", desc = "Git log" },
-
-			-- Diff en merge functionaliteit
-			{ "<leader>gd", "<cmd>Gdiffsplit<cr>", desc = "Git diff split" },
-			{ "<leader>gD", "<cmd>Gvdiffsplit<cr>", desc = "Git diff vertical" },
-
-			-- Checkout en branch beheer
-			{ "<leader>gCo", "<cmd>Git checkout<space>", desc = "Git checkout (branch/file)" },
-			{ "<leader>gCb", "<cmd>Git checkout -b<space>", desc = "Git checkout new branch" },
-
-			-- Remote en fetch
-			{ "<leader>gf", "<cmd>Git fetch origin<cr>", desc = "Git fetch origin" },
-			{ "<leader>gu", "<cmd>Git remote update<cr>", desc = "Git remote update" },
-
-			-- Browsen en log
-			{ "<leader>go", "<cmd>GBrowse<cr>", desc = "Git browse remote" },
-			{ "<leader>gL", "<cmd>0Gclog<cr>", desc = "Git file log" },
-
-			-- Bewerken en verwijderen
-			{ "<leader>gr", "<cmd>gremove<cr>", desc = "git remove" },
-			{ "<leader>gm", "<cmd>gmove<space>", desc = "git move/rename" },
-		},
-	},
-
 	-- Git Conflict Resolution
 	{
 		"akinsho/git-conflict.nvim",

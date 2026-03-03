@@ -6,6 +6,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- C# / Razor filetypes
+vim.filetype.add({
+	extension = {
+		cshtml = "razor",
+		razor = "razor",
+	},
+})
+
 local function setup_git_autocmds()
 	local augroup = vim.api.nvim_create_augroup("GitIntegration", { clear = true })
 

@@ -53,7 +53,7 @@ return {
 				-- Jump to the type of the word under your cursor.
 				--  Useful when you're not sure what type a variable is and you want to see
 				--  the definition of its *type*, not where it was *defined*.
-				map("gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
+				map("gy", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
 
 				local function client_supports_method(client, method, bufnr)
 					if vim.fn.has("nvim-0.11") == 1 then
@@ -198,6 +198,7 @@ return {
 
 			omnisharp = {
 				cmd = { "omnisharp" },
+				filetypes = { "cs", "vb" },
 				settings = {
 					FormattingOptions = {
 						EnableEditorConfigSupport = true,
@@ -206,6 +207,7 @@ return {
 					RoslynExtensionsOptions = {
 						EnableAnalyzersSupport = true,
 						EnableImportCompletion = true,
+						EnableDecompilationSupport = true,
 					},
 				},
 			},

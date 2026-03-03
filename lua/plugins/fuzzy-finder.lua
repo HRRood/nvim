@@ -46,14 +46,14 @@ return {
 			desc = "Live Grep with Args",
 		},
 		{
-			"\\\\",
+			"<leader>bb",
 			function()
 				require("telescope.builtin").buffers()
 			end,
 			desc = "Lists open buffers",
 		},
 		{
-			";t",
+			"<leader>fH",
 			function()
 				require("telescope.builtin").help_tags()
 			end,
@@ -88,7 +88,7 @@ return {
 			desc = "LSP incoming calls",
 		},
 		{
-			"sf",
+			"<leader>sf",
 			function()
 				local telescope = require("telescope")
 				local function telescope_buffer_dir()
@@ -228,22 +228,39 @@ return {
 		local actions = require("telescope.actions")
 		local fb_actions = require("telescope").extensions.file_browser.actions
 
-		-- Prompt input line
+		-- Catppuccin Mocha Telescope highlights
+		local colors = {
+			base = "#1e1e2e",
+			mantle = "#181825",
+			surface0 = "#313244",
+			surface1 = "#45475a",
+			text = "#cdd6f4",
+			mauve = "#cba6f7",
+			green = "#a6e3a1",
+			teal = "#94e2d5",
+			blue = "#89b4fa",
+			pink = "#f5c2e7",
+		}
 
-		-- Prompt window (darker)
-		vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "#2f383e" }) -- dark grayish green
-		vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = "#d699b6", bg = "#2f383e" }) -- muted pink
-		vim.api.nvim_set_hl(0, "TelescopePromptTitle", { fg = "#d699b6", bg = "#2f383e", bold = true })
+		-- Prompt window
+		vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = colors.surface0 })
+		vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = colors.mauve, bg = colors.surface0 })
+		vim.api.nvim_set_hl(0, "TelescopePromptTitle", { fg = colors.base, bg = colors.mauve, bold = true })
+		vim.api.nvim_set_hl(0, "TelescopePromptPrefix", { fg = colors.mauve, bg = colors.surface0 })
 
 		-- Results window
-		vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#323d43" }) -- soft background
-		vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = "#d699b6", bg = "#323d43" })
-		vim.api.nvim_set_hl(0, "TelescopeResultsTitle", { fg = "#a7c080", bg = "#323d43", bold = true }) -- greenish
+		vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = colors.mantle })
+		vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = colors.mantle, bg = colors.mantle })
+		vim.api.nvim_set_hl(0, "TelescopeResultsTitle", { fg = colors.base, bg = colors.green, bold = true })
 
 		-- Preview window
-		vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "#323d43" })
-		vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = "#d699b6", bg = "#323d43" })
-		vim.api.nvim_set_hl(0, "TelescopePreviewTitle", { fg = "#7fbbb3", bg = "#323d43", bold = true }) -- teal
+		vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = colors.base })
+		vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = colors.base, bg = colors.base })
+		vim.api.nvim_set_hl(0, "TelescopePreviewTitle", { fg = colors.base, bg = colors.teal, bold = true })
+
+		-- Selection
+		vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = colors.surface1, fg = colors.text, bold = true })
+		vim.api.nvim_set_hl(0, "TelescopeSelectionCaret", { fg = colors.mauve, bg = colors.surface1 })
 
 		telescope.setup({
 			defaults = {

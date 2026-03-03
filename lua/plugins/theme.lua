@@ -27,42 +27,76 @@
 -- 	end,
 -- }
 
-return {
-	"sainnhe/sonokai",
-	priority = 1000,
-	config = function()
-		vim.g.sonokai_transparent_background = "1"
-		vim.g.sonokai_enable_italic = "1"
-		vim.g.sonokai_style = "andromeda"
-		vim.cmd.colorscheme("sonokai")
-	end,
-}
 -- return {
--- 	"catppuccin/nvim",
--- 	name = "catppuccin",
+-- 	"sainnhe/sonokai",
 -- 	priority = 1000,
 -- 	config = function()
--- 		require("catppuccin").setup({
--- 			flavour = "mocha", -- latte, frappe, macchiato, mocha
--- 			background = { -- :h background
--- 				light = "latte",
--- 				dark = "mocha",
--- 			},
--- 			transparent_background = true,
--- 			show_end_of_buffer = false, -- show the '~' characters after the end of buffers
--- 			term_colors = false, -- set terminal colors (vim.g.terminal_color_0 = base.Red)
--- 			no_italic = false, -- force no italic
--- 			no_bold = false, -- force no bold
--- 			styles = {
--- 				comments = { "italic" },
--- 				functions = { "italic" },
--- 				keywords = { "italic" },
--- 				strings = { "italic" },
--- 				variables = { "italic" },
--- 			},
--- 		})
--- 	end,
--- 	init = function()
--- 		vim.cmd.colorscheme("catppuccin-mocha")
+-- 		vim.g.sonokai_transparent_background = "1"
+-- 		vim.g.sonokai_enable_italic = "1"
+-- 		vim.g.sonokai_style = "andromeda"
+-- 		vim.cmd.colorscheme("sonokai")
 -- 	end,
 -- }
+
+return {
+	"catppuccin/nvim",
+	name = "catppuccin",
+	priority = 1000,
+	config = function()
+		require("catppuccin").setup({
+			flavour = "mocha", -- latte, frappe, macchiato, mocha
+			background = {
+				light = "latte",
+				dark = "mocha",
+			},
+			transparent_background = true,
+			show_end_of_buffer = false,
+			term_colors = true,
+			no_italic = false,
+			no_bold = false,
+			styles = {
+				comments = { "italic" },
+				conditionals = { "italic" },
+				loops = {},
+				functions = { "italic" },
+				keywords = { "italic" },
+				strings = {},
+				variables = {},
+				numbers = {},
+				booleans = { "italic" },
+				properties = {},
+				types = { "italic" },
+				operators = {},
+			},
+			integrations = {
+				aerial = true,
+				blink_cmp = true,
+				diffview = true,
+				flash = true,
+				gitsigns = true,
+				harpoon = true,
+				indent_blankline = { enabled = true },
+				lsp_trouble = true,
+				mason = true,
+				mini = { enabled = true },
+				native_lsp = {
+					enabled = true,
+					underlines = {
+						errors = { "undercurl" },
+						hints = { "undercurl" },
+						warnings = { "undercurl" },
+						information = { "undercurl" },
+					},
+				},
+				neotest = true,
+				noice = true,
+				notify = true,
+				telescope = { enabled = true },
+				treesitter = true,
+				treesitter_context = true,
+				which_key = true,
+			},
+		})
+		vim.cmd.colorscheme("catppuccin")
+	end,
+}

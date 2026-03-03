@@ -339,16 +339,6 @@ return {
 			desc = "Show Config",
 		},
 
-		-- Quick dismiss with Escape
-		{
-			"<Esc>",
-			function()
-				require("noice").cmd("dismiss")
-			end,
-			mode = "n",
-			desc = "Dismiss Noice Messages",
-			silent = true,
-		},
 	},
 
 	config = function(_, opts)
