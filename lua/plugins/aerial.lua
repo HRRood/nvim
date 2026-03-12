@@ -1,6 +1,5 @@
 return {
 	"stevearc/aerial.nvim",
-	branch = "nvim-0.x", -- Compatibel met Neovim < 0.11
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter",
 		"nvim-tree/nvim-web-devicons",
