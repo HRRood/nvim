@@ -44,7 +44,7 @@ return {
 	priority = 1000,
 	config = function()
 		require("catppuccin").setup({
-			flavour = "mocha", -- latte, frappe, macchiato, mocha
+			flavour = "mocha",
 			background = {
 				light = "latte",
 				dark = "mocha",
@@ -54,6 +54,37 @@ return {
 			term_colors = true,
 			no_italic = false,
 			no_bold = false,
+			-- JDM Sakura theme - Honda NSX racing under cherry blossoms
+			color_overrides = {
+				mocha = {
+					rosewater = "#ffd6e0", -- pale sakura petal
+					flamingo = "#ffb7c5",  -- classic cherry blossom pink
+					pink = "#f8a5c2",      -- vibrant sakura
+					mauve = "#dda0dd",     -- plum blossom
+					red = "#dc143c",       -- NSX crimson red
+					maroon = "#c41e3a",    -- deep racing red
+					peach = "#ffb86c",     -- warm sunset glow
+					yellow = "#ffe066",    -- headlight beam
+					green = "#50c878",     -- lush mountain green
+					teal = "#5fb49c",      -- forest canopy
+					sky = "#87ceeb",       -- bright anime sky
+					sapphire = "#6eb5ff",  -- crisp mountain air
+					blue = "#5dade2",      -- vivid sky blue
+					lavender = "#e6b8d9",  -- sakura shadow
+					text = "#f5e6eb",      -- soft cherry white
+					subtext1 = "#e0ccd4",
+					subtext0 = "#c9b3bc",
+					overlay2 = "#a08a94",
+					overlay1 = "#877078",
+					overlay0 = "#6e5a62",
+					surface2 = "#524148",  -- asphalt with pink hue
+					surface1 = "#3d3238",
+					surface0 = "#2e252a",
+					base = "#1a1418",      -- dark road at dusk
+					mantle = "#140f12",
+					crust = "#0e0a0c",
+				},
+			},
 			styles = {
 				comments = { "italic" },
 				conditionals = { "italic" },
