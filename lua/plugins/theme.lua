@@ -62,7 +62,7 @@ return {
 					pink = "#f8a5c2",      -- vibrant sakura
 					mauve = "#dda0dd",     -- plum blossom
 					red = "#dc143c",       -- NSX crimson red
-					maroon = "#c41e3a",    -- deep racing red
+					maroon = "#f47c7c",    -- soft coral red (parameters)
 					peach = "#ffb86c",     -- warm sunset glow
 					yellow = "#ffe066",    -- headlight beam
 					green = "#50c878",     -- lush mountain green
@@ -98,6 +98,15 @@ return {
 				properties = {},
 				types = { "italic" },
 				operators = {},
+			},
+			highlight_overrides = {
+				mocha = function(colors)
+					return {
+						-- Sakura cursorline with racing red border
+						CursorLine = { bg = "#2a1f24" },
+						CursorLineNr = { fg = "#dc143c", style = { "bold" } }, -- deep racing red
+					}
+				end,
 			},
 			integrations = {
 				aerial = true,
