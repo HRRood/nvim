@@ -185,7 +185,7 @@ return {
           end,
         },
       },
-      extensions = { "neo-tree", "lazy", "fzf" },
+      extensions = { "oil", "lazy", "fzf" },
     }
 
     -- Optional: Add trouble symbols if trouble.nvim is available

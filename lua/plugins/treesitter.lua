@@ -24,7 +24,6 @@ return {
 				"scss",
 				"sql",
 				"html",
-			"c_sharp",
 			"yaml",
 			"toml",
 			"dockerfile",

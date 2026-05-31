@@ -198,22 +198,6 @@ return {
 
 			intelephense = {},
 
-		omnisharp = {
-				cmd = { "omnisharp" },
-				filetypes = { "cs", "vb" },
-				settings = {
-					FormattingOptions = {
-						EnableEditorConfigSupport = true,
-						OrganizeImports = true,
-					},
-					RoslynExtensionsOptions = {
-						EnableAnalyzersSupport = true,
-						EnableImportCompletion = true,
-						EnableDecompilationSupport = true,
-					},
-				},
-			},
-
 			lua_ls = {
 				-- cmd = { ... },
 				-- filetypes = { ... },

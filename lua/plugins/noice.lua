@@ -351,7 +351,7 @@ return {
 		require("noice").setup(opts)
 
 		require("notify").setup({
-			background_colour = "#1e1e2e",
+			background_colour = "#1a1418",
 		})
 
 		-- Set up additional integrations if available

@@ -6,7 +6,6 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		"marilari88/neotest-vitest",
 		"nvim-neotest/neotest-jest",
-		"Issafalcon/neotest-dotnet",
 	},
 	keys = {
 		{ "<leader>nt", function() require("neotest").run.run() end, desc = "Run Nearest Test" },
@@ -35,9 +34,6 @@ return {
 					cwd = function()
 						return vim.fn.getcwd()
 					end,
-				}),
-				require("neotest-dotnet")({
-					dap = { justMyCode = false },
 				}),
 			},
 		})

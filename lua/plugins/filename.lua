@@ -1,8 +1,5 @@
 return {
 	"b0o/incline.nvim",
-	dependencies = {
-		"sainnhe/everforest",
-	},
 	event = "BufReadPre",
 	priority = 1200,
 	config = function()

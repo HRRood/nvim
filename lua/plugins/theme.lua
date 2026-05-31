@@ -230,7 +230,6 @@ return {
 				aerial = true,
 				blink_cmp = true,
 				diffview = true,
-				flash = true,
 				gitsigns = true,
 				harpoon = true,
 				indent_blankline = { enabled = true },
