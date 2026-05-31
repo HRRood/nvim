@@ -196,7 +196,9 @@ return {
 			html = {},
 			prismals = {},
 
-			omnisharp = {
+			intelephense = {},
+
+		omnisharp = {
 				cmd = { "omnisharp" },
 				filetypes = { "cs", "vb" },
 				settings = {

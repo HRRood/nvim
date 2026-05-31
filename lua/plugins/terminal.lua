@@ -28,7 +28,7 @@ return {
 			shell = shell_cmd,
 			float_opts = {
 				border = "curved",
-				winblend = 3,
+				winblend = 0,
 				highlights = {
 					border = "ToggleTermBorder",
 					background = "ToggleTermNormal",
