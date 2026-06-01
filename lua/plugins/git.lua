@@ -361,45 +361,21 @@ return {
 		},
 
 		config = function()
-			require("lazygit").setup({
-				winscale = 0.85,
-				-- optionally adjust float window size
-				mappings = {
-					t = {
-						-- override lazygit mapping: pressing `q` hides
-						["q"] = "hide",
-						["<C-c>"] = function(bufnr)
-							vim.api.nvim_buf_delete(bufnr, { force = true })
-						end,
-					},
-					n = {
-						["q"] = "hide",
-					},
-				},
-				-- other options: open in last used repo
-				use_last = true,
-			})
+			vim.g.lazygit_floating_window_scaling_factor = 0.85
 
 			-- load Telescope extension
 			require("telescope").load_extension("lazygit")
 
-			-- optional: auto-track git projects as you switch buffers
-			vim.api.nvim_create_autocmd("BufEnter", {
-				callback = function()
-					require("lazygit.utils").project_root_dir()
-				end,
-			})
-
 			-- optional: prevent nested lazygit if using flatten.nvim
 			require("flatten").setup({
 				window = { open = "smart" },
-				callbacks = {
-					pre_open = vim.schedule_wrap(function()
+				hooks = {
+					pre_open = function()
 						require("lazygit").hide()
-					end),
-					block_end = vim.schedule_wrap(function()
+					end,
+					block_end = function()
 						require("lazygit").show()
-					end),
+					end,
 				},
 			})
 		end,

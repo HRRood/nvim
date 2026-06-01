@@ -25,8 +25,8 @@ return {
 	init = function()
 		vim.api.nvim_create_autocmd("FocusGained", {
 			callback = function()
-				if vim.bo.filetype == "oil" and not vim.bo.modified then
-					vim.cmd("e")
+				if vim.bo.filetype == "oil" then
+					require("oil.view").render_buffer_async(0)
 				end
 			end,
 		})
