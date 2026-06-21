@@ -15,7 +15,7 @@ return {
 					"javascript", "typescript", "tsx", "jsdoc",
 					"css", "gitignore", "http", "json", "json5",
 					"scss", "sql", "html", "yaml", "toml",
-					"dockerfile", "graphql",
+					"dockerfile", "graphql", "php",
 				}
 				local installed = cfg.get_installed()
 				local missing = vim.tbl_filter(function(lang)

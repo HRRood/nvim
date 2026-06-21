@@ -39,7 +39,13 @@ return {
 			json = { "prettier" },
 			jsonc = { "prettier" },
 			markdown = { "prettier" },
-			-- cs = { "csharpier" },
+			php = { "php_cs_fixer" },
+		},
+		-- cs = { "csharpier" },
+		formatters = {
+			php_cs_fixer = {
+				prepend_args = { "--cache-file=" .. vim.fn.expand("~/.cache/php-cs-fixer/.php-cs-fixer.cache") },
+			},
 		},
 	},
 }

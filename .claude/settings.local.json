@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Read(//Users/royroodenburg/.local/share/nvim/lazy/nvim-treesitter/plugin/**)",
+      "Read(//Users/royroodenburg/.local/share/nvim/lazy/nvim-treesitter/**)",
+      "Read(//Users/royroodenburg/.nvm/alias/**)",
+      "Read(//Users/royroodenburg/.nvm/versions/node/**)",
+      "Bash(brew list *)",
+      "Bash(php --version)"
     ]
   }
 }

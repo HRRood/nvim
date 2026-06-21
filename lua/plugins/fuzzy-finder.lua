@@ -299,7 +299,7 @@ return {
 							local extension = split_path[#split_path]
 							return vim.tbl_contains(image_extensions, extension)
 						end
-						if is_image(filepath) then
+						if is_image(filepath) and vim.fn.executable("catimg") == 1 then
 							local term = vim.api.nvim_open_term(bufnr, {})
 							local function send_output(_, data, _)
 								for _, d in ipairs(data) do
