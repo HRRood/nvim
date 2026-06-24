@@ -159,12 +159,6 @@ return {
 		--  - settings (table): Override the default settings passed when initializing the server.
 		--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 		local servers = {
-			-- clangd = {},
-			-- gopls = {},
-			-- pyright = {},
-			-- rust_analyzer = {},
-			-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-			--
 			ts_ls = {
 				settings = {
 					typescript = {
@@ -189,14 +183,38 @@ return {
 					},
 				},
 			},
-			eslint = {},
+			eslint = {
+				settings = {
+					workingDirectory = { mode = "auto" },
+				},
+			},
 			biome = {},
 			tailwindcss = {},
 			cssls = {},
 			html = {},
 			prismals = {},
 
-			intelephense = {},
+			intelephense = {
+				settings = {
+					intelephense = {
+						environment = {
+							phpVersion = "8.5",
+						},
+						stubs = {
+							"apache", "bcmath", "bz2", "calendar", "Core", "ctype",
+							"curl", "date", "dom", "exif", "fileinfo", "filter",
+							"gd", "gettext", "gmp", "hash", "iconv", "intl",
+							"json", "ldap", "libxml", "mbstring", "mcrypt", "meta",
+							"mysqli", "openssl", "pcntl", "pcre", "PDO", "pdo_mysql",
+							"pdo_pgsql", "pdo_sqlite", "pgsql", "Phar", "posix",
+							"readline", "Reflection", "session", "SimpleXML",
+							"soap", "sockets", "sodium", "SPL", "sqlite3",
+							"standard", "superglobals", "tokenizer", "xml",
+							"xmlreader", "xmlwriter", "xsl", "zip", "zlib",
+						},
+					},
+				},
+			},
 
 			lua_ls = {
 				-- cmd = { ... },

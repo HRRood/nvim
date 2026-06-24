@@ -81,8 +81,7 @@ return {
 		projects = {
 			-- Specify directories to search for projects
 			paths = {
-				"~/projects", -- Look in projects directory
-				"C:/projects", -- Look in C:/projects
+				"~/projects",
 			},
 			-- Pattern matching for project detection
 			patterns = {
@@ -95,6 +94,20 @@ return {
 	},
 	keys = {
 		-- Snacks Picker
+		{
+			"<leader>ff",
+			function()
+				Snacks.picker.files()
+			end,
+			desc = "Find File",
+		},
+		{
+			"<leader>fr",
+			function()
+				Snacks.picker.grep()
+			end,
+			desc = "Find (grep)",
+		},
 		{
 			"<leader>fp",
 			function()

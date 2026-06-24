@@ -40,6 +40,12 @@ return {
 				end,
 				offsets = {
 					{
+						filetype = "neo-tree",
+						text = "File Explorer",
+						text_align = "center",
+						separator = true,
+					},
+					{
 						filetype = "oil",
 						text = "File Explorer",
 						text_align = "center",
@@ -51,7 +57,7 @@ return {
 				show_buffer_close_icons = true,
 				show_close_icon = true,
 				show_tab_indicators = true,
-				show_duplicate_prefix = false,
+				show_duplicate_prefix = true,
 				duplicates_across_groups = true,
 				persist_buffer_sort = true,
 				separator_style = "slant",

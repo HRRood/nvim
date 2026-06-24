@@ -24,6 +24,17 @@ vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.termguicolors = true
+vim.opt.autoread = true
+
+vim.api.nvim_create_user_command("LspRestart", function(opts)
+	local name = opts.args ~= "" and opts.args or nil
+	for _, client in ipairs(vim.lsp.get_clients({ name = name, bufnr = 0 })) do
+		client:stop()
+	end
+	vim.defer_fn(function()
+		vim.cmd("edit")
+	end, 500)
+end, { nargs = "?", desc = "Restart LSP clients for current buffer" })
 -- vim.opt.title = true
 
 if vim.fn.has("win32") == 1 then

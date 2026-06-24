@@ -10,7 +10,7 @@ return {
 	keys = {
 		{ "<leader>nt", function() require("neotest").run.run() end, desc = "Run Nearest Test" },
 		{ "<leader>nf", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run File Tests" },
-		{ "<leader>ns", function() require("neotest").summary.toggle() end, desc = "Toggle Test Summary" },
+		{ "<leader>nT", function() require("neotest").summary.toggle() end, desc = "Toggle Test Summary" },
 		{ "<leader>no", function() require("neotest").output_panel.toggle() end, desc = "Toggle Test Output" },
 		{ "<leader>nS", function() require("neotest").run.stop() end, desc = "Stop Test" },
 	},

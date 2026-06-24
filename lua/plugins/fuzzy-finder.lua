@@ -21,7 +21,7 @@ return {
 		-- 	desc = "Find Plugin File",
 		-- },
 		{
-			"<leader>ff",
+			"<leader>tf",
 			function()
 				require("telescope.builtin").find_files({
 					cwd = vim.fn.getcwd(),
@@ -36,14 +36,14 @@ return {
 					},
 				})
 			end,
-			desc = "[F]ind [F]ile",
+			desc = "[T]elescope [F]ind File",
 		},
 		{
-			"<leader>fr",
+			"<leader>tr",
 			function()
 				require("telescope").extensions.live_grep_args.live_grep_args()
 			end,
-			desc = "Live Grep with Args",
+			desc = "[T]elescope Live Grep with Args",
 		},
 		{
 			"<leader>bb",
@@ -62,9 +62,9 @@ return {
 		{
 			"<leader>;;",
 			function()
-				require("telescope.builtin").resume()
+				Snacks.picker.resume()
 			end,
-			desc = "Resume last Telescope picker",
+			desc = "Resume last Snacks picker",
 		},
 		{
 			"<leader>fe",
