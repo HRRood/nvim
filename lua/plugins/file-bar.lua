@@ -8,7 +8,7 @@ return {
 			{ "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Close non‑pinned buffers" },
 			{ "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Close buffers to the right" },
 			{ "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Close buffers to the left" },
-			{ "<S-q>", "<Cmd>bd<CR>", desc = "Close buffer" },
+			{ "<S-q>", function() Snacks.bufdelete() end, desc = "Close buffer" },
 			{ "<S-h>", "<Cmd>BufferLineCyclePrev<CR>", desc = "Previous buffer" },
 			{ "<S-l>", "<Cmd>BufferLineCycleNext<CR>", desc = "Next buffer" },
 			{ "[B", "<Cmd>BufferLineMovePrev<CR>", desc = "Move buffer left" },

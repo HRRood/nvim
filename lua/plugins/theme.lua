@@ -51,7 +51,7 @@ return {
 			},
 			transparent_background = true,
 			show_end_of_buffer = false,
-			term_colors = true,
+			term_colors = false,
 			no_italic = false,
 			no_bold = false,
 			-- JDM Sakura theme - Honda NSX racing under cherry blossoms
@@ -77,12 +77,12 @@ return {
 					overlay2 = "#a08a94",
 					overlay1 = "#877078",
 					overlay0 = "#6e5a62",
-					surface2 = "#524148", -- asphalt with pink hue
-					surface1 = "#3d3238",
-					surface0 = "#2e252a",
-					base = "#1a1418", -- dark road at dusk
-					mantle = "#140f12",
-					crust = "#0e0a0c",
+					surface2 = "#4a3840", -- asphalt with pink hue
+					surface1 = "#32282e",
+					surface0 = "#221a1e",
+					base = "#0d0a0b", -- near black base
+					mantle = "#080506",
+					crust = "#000000",
 				},
 			},
 			styles = {
@@ -103,7 +103,7 @@ return {
 				mocha = function(colors)
 					return {
 						-- ═══ Cursor & Line ═══
-						CursorLine = { bg = "#2a1f24" },
+						CursorLine = { bg = "#1e1418" },
 						CursorLineNr = { fg = "#dc143c", style = { "bold" } },
 						LineNr = { fg = "#a08a94" },
 						Cursor = { fg = "#1a1418", bg = "#ffb7c5" },
@@ -123,9 +123,9 @@ return {
 						MatchParen = { fg = "#ffb7c5", bg = "#524148", style = { "bold" } },
 
 						-- ═══ Floating Windows ═══
-						NormalFloat = { bg = "#1a1418" },
-						FloatBorder = { fg = "#dc143c", bg = "#1a1418" },
-						FloatTitle = { fg = "#ffb7c5", bg = "#1a1418", style = { "bold" } },
+						NormalFloat = { bg = "#0d0a0b" },
+						FloatBorder = { fg = "#dc143c", bg = "#0d0a0b" },
+						FloatTitle = { fg = "#ffb7c5", bg = "#0d0a0b", style = { "bold" } },
 
 						-- ═══ Telescope ═══
 						TelescopeSelection = { fg = "#ffb7c5", bg = "#2a1f24", style = { "bold" } },
@@ -179,9 +179,9 @@ return {
 						StatusLineNC = { fg = "#877078", bg = "#1a1418" },
 
 						-- ═══ Pmenu (Autocomplete) ═══
-						Pmenu = { fg = "#f5e6eb", bg = "#1a1418" },
-						PmenuSel = { fg = "#1a1418", bg = "#ffb7c5", style = { "bold" } },
-						PmenuSbar = { bg = "#2e252a" },
+						Pmenu = { fg = "#f5e6eb", bg = "#0d0a0b" },
+						PmenuSel = { fg = "#0d0a0b", bg = "#ffb7c5", style = { "bold" } },
+						PmenuSbar = { bg = "#221a1e" },
 						PmenuThumb = { bg = "#dc143c" },
 
 						-- ═══ Todo Comments ═══

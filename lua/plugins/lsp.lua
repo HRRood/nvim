@@ -23,7 +23,13 @@ return {
 				map("grn", vim.lsp.buf.rename, "[R]e[n]ame", { "n", "x" })
 
 				-- Alt+Enter to show code actions (like in WebStorm)
-				map("<leader>.", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
+				map("<leader>i", function()
+					require("fastaction").code_action({
+						filter = function(action)
+							return not action.disabled
+						end,
+					})
+				end, "Code Action", { "n", "x" })
 
 				map("gr", function()
 					require("telescope.builtin").lsp_references({
@@ -201,16 +207,59 @@ return {
 							phpVersion = "8.5",
 						},
 						stubs = {
-							"apache", "bcmath", "bz2", "calendar", "Core", "ctype",
-							"curl", "date", "dom", "exif", "fileinfo", "filter",
-							"gd", "gettext", "gmp", "hash", "iconv", "intl",
-							"json", "ldap", "libxml", "mbstring", "mcrypt", "meta",
-							"mysqli", "openssl", "pcntl", "pcre", "PDO", "pdo_mysql",
-							"pdo_pgsql", "pdo_sqlite", "pgsql", "Phar", "posix",
-							"readline", "Reflection", "session", "SimpleXML",
-							"soap", "sockets", "sodium", "SPL", "sqlite3",
-							"standard", "superglobals", "tokenizer", "xml",
-							"xmlreader", "xmlwriter", "xsl", "zip", "zlib",
+							"apache",
+							"bcmath",
+							"bz2",
+							"calendar",
+							"Core",
+							"ctype",
+							"curl",
+							"date",
+							"dom",
+							"exif",
+							"fileinfo",
+							"filter",
+							"gd",
+							"gettext",
+							"gmp",
+							"hash",
+							"iconv",
+							"intl",
+							"json",
+							"ldap",
+							"libxml",
+							"mbstring",
+							"mcrypt",
+							"meta",
+							"mysqli",
+							"openssl",
+							"pcntl",
+							"pcre",
+							"PDO",
+							"pdo_mysql",
+							"pdo_pgsql",
+							"pdo_sqlite",
+							"pgsql",
+							"Phar",
+							"posix",
+							"readline",
+							"Reflection",
+							"session",
+							"SimpleXML",
+							"soap",
+							"sockets",
+							"sodium",
+							"SPL",
+							"sqlite3",
+							"standard",
+							"superglobals",
+							"tokenizer",
+							"xml",
+							"xmlreader",
+							"xmlwriter",
+							"xsl",
+							"zip",
+							"zlib",
 						},
 					},
 				},
@@ -254,7 +303,7 @@ return {
 			"prettier", -- Used to format web files
 			"eslint_d", -- Fast ESLint daemon
 			"php-cs-fixer", -- PHP formatter
-				"phpstan", -- PHP static analysis
+			"phpstan", -- PHP static analysis
 			-- "csharpier", -- C# formatter
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
