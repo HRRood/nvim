@@ -184,6 +184,12 @@ return {
 						PmenuSbar = { bg = "#221a1e" },
 						PmenuThumb = { bg = "#dc143c" },
 
+						-- ═══ Treesitter ═══
+						-- catppuccin hardcodes @type.builtin to mauve (same as keywords), which makes
+						-- builtins like `boolean`/`null`/`undefined` blend into keywords instead of
+						-- reading as types. Match it to @type's color (yellow) instead.
+						["@type.builtin"] = { fg = colors.yellow, style = { "italic" } },
+
 						-- ═══ Todo Comments ═══
 						["@text.todo"] = { fg = "#1a1418", bg = "#dc143c", style = { "bold" } },
 						["@text.note"] = { fg = "#1a1418", bg = "#87ceeb", style = { "bold" } },

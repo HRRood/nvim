@@ -35,7 +35,7 @@ return {
 		},
 		window = {
 			position = "left",
-			width = 35,
+			width = 45,
 		},
 		default_component_configs = {
 			git_status = {

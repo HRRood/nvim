@@ -413,6 +413,7 @@ return {
 					initial_mode = "normal",
 					sort_mru = true,
 					ignore_current_buffer = true,
+					path_display = { "filename_first" },
 				},
 				oldfiles = {
 					theme = "dropdown",

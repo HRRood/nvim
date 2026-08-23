@@ -12,6 +12,30 @@ return {
 		"saghen/blink.cmp",
 	},
 	config = function()
+		-- For React components (PascalCase identifier in a .tsx/.jsx file), `gr`
+		-- normally also lists the import line and the JSX closing tag alongside
+		-- the actual usage. Filter those two out; Telescope drops any entry for
+		-- which entry_maker returns nil. Only used when is_component is true, so
+		-- LSP references for everything else (other languages, lowercase
+		-- identifiers/hooks/variables) keep telescope's default entry_maker.
+		local function component_reference_entry_maker(opts)
+			local gen_from_quickfix = require("telescope.make_entry").gen_from_quickfix(opts)
+			return function(entry)
+				local text = entry.text or ""
+				local col = entry.col or 1
+
+				if text:match("^%s*import%s") then
+					return nil
+				end
+
+				if text:sub(col - 2, col - 1) == "</" then
+					return nil
+				end
+
+				return gen_from_quickfix(entry)
+			end
+		end
+
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
@@ -32,9 +56,15 @@ return {
 				end, "Code Action", { "n", "x" })
 
 				map("gr", function()
+					local ft = vim.bo[event.buf].filetype
+					local is_jsx_ft = ft == "typescriptreact" or ft == "javascriptreact"
+					local word = vim.fn.expand("<cword>")
+					local is_component = is_jsx_ft and word:match("^%u") ~= nil
+
 					require("telescope.builtin").lsp_references({
 						default_text = "", -- 👈 disables auto-prefill
 						initial_mode = "normal", -- optional: avoid insert mode
+						entry_maker = is_component and component_reference_entry_maker() or nil,
 					})
 				end, "[G]oto [R]eferences")
 

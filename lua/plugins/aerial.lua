@@ -55,7 +55,7 @@ return {
 		nerd_font = "auto",
 		on_attach = function(bufnr) end,
 		on_first_symbols = function(bufnr) end,
-		open_automatic = false,
+		open_automatic = true,
 		post_jump_cmd = "normal! zz",
 		post_parse_symbol = function(bufnr, item, ctx)
 			return true
