@@ -8,8 +8,9 @@ return {
 		},
 		"mason-org/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		{ "j-hui/fidget.nvim", opts = {} },
 		"saghen/blink.cmp",
+		-- JSON/YAML schemas (package.json, tsconfig, composer.json, GitHub Actions, ...)
+		"b0o/SchemaStore.nvim",
 	},
 	config = function()
 		-- For React components (PascalCase identifier in a .tsx/.jsx file), `gr`
@@ -45,6 +46,13 @@ return {
 				end
 
 				map("grn", vim.lsp.buf.rename, "[R]e[n]ame", { "n", "x" })
+
+				-- Files renamed/moved outside nvim (git, Claude Code, Finder) desync ts_ls,
+				-- leaving stale diagnostics. Restart the buffer's clients to resync.
+				map("<leader>lr", function()
+					vim.diagnostic.reset(nil, event.buf)
+					vim.cmd("lsp restart")
+				end, "[L]SP [R]estart")
 
 				-- Alt+Enter to show code actions (like in WebStorm)
 				map("<leader>i", function()
@@ -179,6 +187,18 @@ return {
 			},
 		})
 
+		-- Neovim only re-pulls diagnostics (used by eslint) after a change when the
+		-- buffer is visible. Edits to hidden buffers (renames, code actions, etc.)
+		-- leave stale diagnostics on the wrong lines, so re-pull when it is shown again.
+		vim.api.nvim_create_autocmd("BufWinEnter", {
+			group = vim.api.nvim_create_augroup("lsp-pull-diagnostics-refresh", { clear = true }),
+			callback = function(event)
+				if #vim.lsp.get_clients({ bufnr = event.buf, method = "textDocument/diagnostic" }) > 0 then
+					pcall(vim.lsp.diagnostic._refresh, event.buf)
+				end
+			end,
+		})
+
 		-- LSP servers and clients are able to communicate to each other what features they support.
 		--  By default, Neovim doesn't support everything that is in the LSP specification.
 		--  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -195,26 +215,39 @@ return {
 		--  - settings (table): Override the default settings passed when initializing the server.
 		--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 		local servers = {
-			ts_ls = {
+			-- vtsls: the TypeScript server VS Code uses (replaces ts_ls)
+			vtsls = {
 				settings = {
+					vtsls = {
+						-- use the project's own TypeScript from node_modules
+						autoUseWorkspaceTsdk = true,
+						enableMoveToFileCodeAction = true,
+						experimental = {
+							completion = { enableServerSideFuzzyMatch = true },
+						},
+					},
 					typescript = {
+						updateImportsOnFileMove = { enabled = "always" },
+						suggest = { completeFunctionCalls = true },
+						tsserver = { maxTsServerMemory = 8192 },
 						inlayHints = {
-							includeInlayParameterNameHints = "all",
-							includeInlayFunctionParameterTypeHints = true,
-							includeInlayVariableTypeHints = true,
-							includeInlayPropertyDeclarationTypeHints = true,
-							includeInlayFunctionLikeReturnTypeHints = true,
-							includeInlayEnumMemberValueHints = true,
+							parameterNames = { enabled = "all" },
+							parameterTypes = { enabled = true },
+							variableTypes = { enabled = true },
+							propertyDeclarationTypes = { enabled = true },
+							functionLikeReturnTypes = { enabled = true },
+							enumMemberValues = { enabled = true },
 						},
 					},
 					javascript = {
+						updateImportsOnFileMove = { enabled = "always" },
 						inlayHints = {
-							includeInlayParameterNameHints = "all",
-							includeInlayFunctionParameterTypeHints = true,
-							includeInlayVariableTypeHints = true,
-							includeInlayPropertyDeclarationTypeHints = true,
-							includeInlayFunctionLikeReturnTypeHints = true,
-							includeInlayEnumMemberValueHints = true,
+							parameterNames = { enabled = "all" },
+							parameterTypes = { enabled = true },
+							variableTypes = { enabled = true },
+							propertyDeclarationTypes = { enabled = true },
+							functionLikeReturnTypes = { enabled = true },
+							enumMemberValues = { enabled = true },
 						},
 					},
 				},
@@ -222,6 +255,23 @@ return {
 			eslint = {
 				settings = {
 					workingDirectory = { mode = "auto" },
+				},
+			},
+			jsonls = {
+				settings = {
+					json = {
+						schemas = require("schemastore").json.schemas(),
+						validate = { enable = true },
+					},
+				},
+			},
+			yamlls = {
+				settings = {
+					yaml = {
+						-- use SchemaStore.nvim's catalog instead of yamlls' built-in download
+						schemaStore = { enable = false, url = "" },
+						schemas = require("schemastore").yaml.schemas(),
+					},
 				},
 			},
 			biome = {},
@@ -331,24 +381,24 @@ return {
 		vim.list_extend(ensure_installed, {
 			"stylua", -- Used to format Lua code
 			"prettier", -- Used to format web files
-			"eslint_d", -- Fast ESLint daemon
+			"prettierd", -- Prettier daemon, much faster format-on-save
 			"php-cs-fixer", -- PHP formatter
 			"phpstan", -- PHP static analysis
 			-- "csharpier", -- C# formatter
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+		-- mason-lspconfig v2 no longer supports `handlers`; register the configs
+		-- with vim.lsp.config and let automatic_enable start installed servers.
+		vim.lsp.config("*", { capabilities = capabilities })
+		for server_name, server in pairs(servers) do
+			vim.lsp.config(server_name, server)
+		end
+
 		require("mason-lspconfig").setup({
 			ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-			automatic_installation = false,
-			handlers = {
-				function(server_name)
-					local server = servers[server_name] or {}
-					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-					vim.lsp.config(server_name, server)
-					vim.lsp.enable(server_name)
-				end,
-			},
+			-- ts_ls is replaced by vtsls; never start both
+			automatic_enable = { exclude = { "ts_ls" } },
 		})
 	end,
 }

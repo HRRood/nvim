@@ -5,6 +5,8 @@ return {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
 		"MunifTanjim/nui.nvim",
+		-- Tell LSP servers about renames/moves so vtsls stays in sync and updates imports
+		{ "antosha417/nvim-lsp-file-operations", opts = {} },
 	},
 	lazy = true,
 	cmd = "Neotree",

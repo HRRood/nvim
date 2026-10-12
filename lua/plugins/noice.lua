@@ -244,14 +244,6 @@ return {
 			mode = "c",
 			desc = "Redirect Cmdline",
 		},
-		{
-			"<leader>scr",
-			function()
-				require("noice").redirect(vim.fn.getcmdline())
-			end,
-			mode = "c",
-			desc = "Redirect Cmdline",
-		},
 
 		-- Message navigation
 		{
@@ -301,7 +293,8 @@ return {
 			silent = true,
 			expr = true,
 			desc = "Scroll Forward",
-			mode = { "i", "n", "s" },
+			-- not "n": neoscroll owns <C-f>/<C-b> in normal mode
+			mode = { "i", "s" },
 		},
 		{
 			"<c-b>",
@@ -313,7 +306,8 @@ return {
 			silent = true,
 			expr = true,
 			desc = "Scroll Backward",
-			mode = { "i", "n", "s" },
+			-- not "n": neoscroll owns <C-f>/<C-b> in normal mode
+			mode = { "i", "s" },
 		},
 
 		-- Additional useful keymaps

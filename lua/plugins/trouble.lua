@@ -11,9 +11,7 @@ return {
 		{ "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
 	},
 	opts = {
-		position = "bottom",
-		height = 15,
-		padding = true,
+		win = { position = "bottom", size = 15 },
 		auto_open = false,
 		auto_close = true,
 		auto_preview = true,

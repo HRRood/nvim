@@ -149,6 +149,8 @@ return {
 						GitSignsAddLn = { bg = "#1f2a1f" },
 						GitSignsChangeLn = { bg = "#2a2520" },
 						GitSignsDeleteLn = { bg = "#2a1f1f" },
+						-- inline blame: overlay1, subtle but still readable on the CursorLine bg
+						GitSignsCurrentLineBlame = { fg = "#877078", style = { "italic" } },
 
 						-- ═══ Diff ═══
 						DiffAdd = { bg = "#1f2a1f" },

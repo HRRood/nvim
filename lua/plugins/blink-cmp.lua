@@ -18,7 +18,19 @@ return {
 			["<C-p>"] = { "select_prev", "fallback" },
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
-			["<Tab>"] = { "snippet_forward", "fallback" },
+			["<C-k>"] = false, -- keep insert-mode <C-k> = <Up> from keymaps.lua
+			-- Supermaven suggestion first, then snippet jump, then a normal <Tab>
+			["<Tab>"] = {
+				function()
+					local ok, preview = pcall(require, "supermaven-nvim.completion_preview")
+					if ok and preview.has_suggestion() then
+						vim.schedule(preview.on_accept_suggestion)
+						return true
+					end
+				end,
+				"snippet_forward",
+				"fallback",
+			},
 			["<S-Tab>"] = { "snippet_backward", "fallback" },
 		},
 		appearance = {
@@ -33,8 +45,9 @@ return {
 				auto_show = true,
 				auto_show_delay_ms = 200,
 			},
+			-- Off: Supermaven already shows an inline preview
 			ghost_text = {
-				enabled = true,
+				enabled = false,
 			},
 		},
 		snippets = {

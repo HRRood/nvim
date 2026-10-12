@@ -1,12 +1,12 @@
 return {
 	{
 		"willothy/flatten.nvim",
-		config = true,
-		-- or pass configuration with
-		-- opts = {  }
 		-- Ensure that it runs first to minimize delay when opening file from terminal
 		lazy = false,
 		priority = 1001,
+		opts = {
+			window = { open = "smart" },
+		},
 	},
 	{
 		"lewis6991/gitsigns.nvim",
@@ -64,7 +64,7 @@ return {
 						return "]c"
 					end
 					vim.schedule(function()
-						gs.next_hunk()
+						gs.nav_hunk("next")
 					end)
 					return "<Ignore>"
 				end, { expr = true, desc = "Next hunk" })
@@ -74,10 +74,26 @@ return {
 						return "[c"
 					end
 					vim.schedule(function()
-						gs.prev_hunk()
+						gs.nav_hunk("prev")
 					end)
 					return "<Ignore>"
 				end, { expr = true, desc = "Previous hunk" })
+
+				-- Hunk actions
+				map("n", "<leader>gs", gs.stage_hunk, { desc = "Stage hunk" })
+				map("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk" })
+				map("v", "<leader>gs", function()
+					gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end, { desc = "Stage selected lines" })
+				map("v", "<leader>gr", function()
+					gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+				end, { desc = "Reset selected lines" })
+				map("n", "<leader>gS", gs.stage_buffer, { desc = "Stage buffer" })
+				map("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer" })
+				map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
+				map("n", "<leader>gb", function()
+					gs.blame_line({ full = true })
+				end, { desc = "Blame line" })
 
 				-- Text object
 				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select hunk" })
@@ -183,160 +199,33 @@ return {
 					DiffviewFileHistory = {},
 				},
 				hooks = {},
-				keymaps = {
-					disable_defaults = false,
-					view = {
-						{ "n", "<tab>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel." } },
-						{
-							"n",
-							"gf",
-							"<cmd>DiffviewGoToFile<cr>",
-							{ desc = "Open the file in the previous tabpage" },
-						},
-						{ "n", "<C-w><C-f>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-					},
-					diff1 = {
-						{ "n", "g?", "<cmd>h diffview-maps-diff1<cr>", { desc = "Open the help panel" } },
-					},
-					diff2 = {
-						{ "n", "g?", "<cmd>h diffview-maps-diff2<cr>", { desc = "Open the help panel" } },
-					},
-					diff3 = {
-						{
-							{ "n", "x" },
-							"2do",
-							{ desc = "Obtain the diff hunk from the MERGE_HEAD version of the file" },
-						},
-						{
-							{ "n", "x" },
-							"3do",
-							{ desc = "Obtain the diff hunk from the MERGE_HEAD version of the file" },
-						},
-						{ "n", "g?", "<cmd>h diffview-maps-diff3<cr>", { desc = "Open the help panel" } },
-					},
-					diff4 = {
-						{ { "n", "x" }, "1do", { desc = "Obtain the diff hunk from the BASE version of the file" } },
-						{ { "n", "x" }, "2do", { desc = "Obtain the diff hunk from the LOCAL version of the file" } },
-						{ { "n", "x" }, "3do", { desc = "Obtain the diff hunk from the REMOTE version of the file" } },
-						{ "n", "g?", "<cmd>h diffview-maps-diff4<cr>", { desc = "Open the help panel" } },
-					},
-					file_panel = {
-						{
-							"n",
-							"j",
-							"j",
-							{ desc = "Bring the cursor to the next file entry" },
-						},
-						{
-							"n",
-							"<down>",
-							"j",
-							{ desc = "Bring the cursor to the next file entry" },
-						},
-						{
-							"n",
-							"k",
-							"k",
-							{ desc = "Bring the cursor to the previous file entry." },
-						},
-						{
-							"n",
-							"<up>",
-							"k",
-							{ desc = "Bring the cursor to the previous file entry." },
-						},
-						{
-							"n",
-							"<cr>",
-							"<cmd>DiffviewOpen<cr>",
-							{ desc = "Open the diff for the selected entry." },
-						},
-						{
-							"n",
-							"o",
-							"<cmd>DiffviewOpen<cr>",
-							{ desc = "Open the diff for the selected entry." },
-						},
-						{
-							"n",
-							"l",
-							"<cmd>DiffviewOpen<cr>",
-							{ desc = "Open the diff for the selected entry." },
-						},
-						{
-							"n",
-							"<2-LeftMouse>",
-							"<cmd>DiffviewOpen<cr>",
-							{ desc = "Open the diff for the selected entry." },
-						},
-						{ "n", "-", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{ "n", "h", "<cmd>DiffviewClose<cr>", { desc = "Close the diff view." } },
-						{ "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close the diff view." } },
-						{
-							"n",
-							"R",
-							"<cmd>DiffviewRefresh<cr>",
-							{ desc = "Update stats and entries in the file list." },
-						},
-						{ "n", "<tab>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{
-							"n",
-							"gf",
-							"<cmd>DiffviewGoToFile<cr>",
-							{ desc = "Open the file in the previous tabpage" },
-						},
-						{ "n", "<C-w><C-f>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{ "n", "g<C-x>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{
-							"n",
-							"g?",
-							"<cmd>h diffview-maps-file-panel<cr>",
-							{ desc = "Open the help panel" },
-						},
-					},
-					file_history_panel = {
-						{ "n", "g!", "<cmd>DiffviewOptions<cr>", { desc = "Open the option panel" } },
-						{ "n", "<C-A-d>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{ "n", "g<C-x>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{
-							"n",
-							"g?",
-							"<cmd>h diffview-maps-file-history-panel<cr>",
-							{ desc = "Open the help panel" },
-						},
-					},
-					option_panel = {
-						{ "n", "<tab>", "<cmd>DiffviewToggleFiles<cr>", { desc = "Toggle the file panel" } },
-						{ "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close the diff view" } },
-						{ "n", "g?", "<cmd>h diffview-maps-option-panel<cr>", { desc = "Open the help panel" } },
-					},
-				},
 			})
 		end,
 	},
 
-	-- Git worktree management
+	-- Git worktree management (maintained fork of ThePrimeagen/git-worktree.nvim)
 	{
-		"ThePrimeagen/git-worktree.nvim",
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
+		"polarmutex/git-worktree.nvim",
+		version = "^2",
+		dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+		keys = {
+			{
+				"<leader>gw",
+				function()
+					require("telescope").extensions.git_worktree.git_worktree()
+				end,
+				desc = "Git worktrees",
+			},
+			{
+				"<leader>gW",
+				function()
+					require("telescope").extensions.git_worktree.create_git_worktree()
+				end,
+				desc = "Create worktree",
+			},
 		},
 		config = function()
-			require("git-worktree").setup()
 			require("telescope").load_extension("git_worktree")
-
-			vim.keymap.set(
-				"n",
-				"<leader>gw",
-				require("telescope").extensions.git_worktree.git_worktrees,
-				{ desc = "Git worktrees" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>gW",
-				require("telescope").extensions.git_worktree.create_git_worktree,
-				{ desc = "Create worktree" }
-			)
 		end,
 	},
 	{
@@ -365,19 +254,6 @@ return {
 
 			-- load Telescope extension
 			require("telescope").load_extension("lazygit")
-
-			-- optional: prevent nested lazygit if using flatten.nvim
-			require("flatten").setup({
-				window = { open = "smart" },
-				hooks = {
-					pre_open = function()
-						require("lazygit").hide()
-					end,
-					block_end = function()
-						require("lazygit").show()
-					end,
-				},
-			})
 		end,
 	},
 }

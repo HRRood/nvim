@@ -1,3 +1,6 @@
+-- prettierd keeps a Prettier daemon running; plain prettier is the fallback
+local prettier = { "prettierd", "prettier", stop_after_first = true }
+
 return {
 	"stevearc/conform.nvim",
 	event = { "BufWritePre" },
@@ -12,6 +15,20 @@ return {
 		-- 	desc = "[F]ormat [B]uffer",
 		-- },
 	},
+	init = function()
+		-- Apply ESLint auto-fixes before conform formats the buffer
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = vim.api.nvim_create_augroup("eslint-fix-on-save", { clear = true }),
+			pattern = { "*.js", "*.jsx", "*.ts", "*.tsx", "*.mjs", "*.cjs" },
+			callback = function(event)
+				if vim.fn.exists(":LspEslintFixAll") == 2 then
+					vim.api.nvim_buf_call(event.buf, function()
+						vim.cmd("LspEslintFixAll")
+					end)
+				end
+			end,
+		})
+	end,
 	opts = {
 		notify_on_error = false,
 		format_on_save = function(bufnr)
@@ -29,16 +46,16 @@ return {
 		end,
 		formatters_by_ft = {
 			lua = { "stylua" },
-			javascript = { "prettier" },
-			javascriptreact = { "prettier" },
-			typescript = { "prettier" },
-			typescriptreact = { "prettier" },
-			css = { "prettier" },
-			scss = { "prettier" },
-			html = { "prettier" },
-			json = { "prettier" },
-			jsonc = { "prettier" },
-			markdown = { "prettier" },
+			javascript = prettier,
+			javascriptreact = prettier,
+			typescript = prettier,
+			typescriptreact = prettier,
+			css = prettier,
+			scss = prettier,
+			html = prettier,
+			json = prettier,
+			jsonc = prettier,
+			markdown = prettier,
 			php = { "php_cs_fixer" },
 		},
 		-- cs = { "csharpier" },

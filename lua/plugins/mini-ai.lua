@@ -16,13 +16,13 @@ return {
 				-- Class
 				c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
 				-- Tags (HTML/JSX)
-				t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().googletag.teleport" },
+				t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
 				-- Digits
 				d = { "%f[%d]%d+" },
 				-- Word with case (camelCase, snake_case)
 				e = {
 					{ "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
-					"^().*googletag.teleport",
+					"^().*()$",
 				},
 				-- Hele buffer
 				g = function()
@@ -38,7 +38,7 @@ return {
 				-- Key-value pairs
 				k = { { "%f[%w]%w+%s*=" }, "^%s*()[^=]+()%s*=" },
 				-- Value in key-value
-				v = { { "=%s*[^,;%s]+" }, "^=%s*()[^,;%s]+googletag.teleport" },
+				v = { { "=%s*[^,;%s]+" }, "^=%s*()[^,;%s]+()$" },
 				-- Number (including floats)
 				n = { "%f[%d]%d+%.?%d*" },
 			},

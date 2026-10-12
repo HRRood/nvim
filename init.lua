@@ -28,8 +28,6 @@ vim.g.have_nerd_font = true
 -- Disable some default plugins for better performance
 local disabled_plugins = {
 	"gzip",
-	"matchit",
-	"matchparen",
 	"netrwPlugin",
 	"tarPlugin",
 	"tohtml",

@@ -1,29 +1,25 @@
 return {
-	"roobert/tailwindcss-colorizer-cmp.nvim",
-	{
-		"NvChad/nvim-colorizer.lua",
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		opts = {},
-		config = function()
-			local nvchadcolorizer = require("colorizer")
-			local tailwindcolorizer = require("tailwindcss-colorizer-cmp")
-
-			nvchadcolorizer.setup({
-				user_default_options = {
-					tailwind = true,
-				},
-				filetypes = { "html", "css", "javascript", "typescript", "jsx", "tsx", "vue", "svelte" },
-			})
-
-			tailwindcolorizer.setup({
-				color_square_width = 2,
-			})
-
-			vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-				callback = function()
-					vim.cmd("ColorizerAttachToBuffer")
-				end,
-			})
-		end,
+	-- Tailwind class colors come from the tailwindcss LSP (Neovim 0.12 shows LSP
+	-- document colors by default, blink.cmp colors the completion menu), so the
+	-- colorizer only handles literal color values like #ff00aa or rgb(...).
+	"NvChad/nvim-colorizer.lua",
+	ft = { "css", "scss", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+	opts = {
+		filetypes = {
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+			-- stylesheets also get named colors (red, rebeccapurple, ...)
+			css = { css = true },
+			scss = { css = true },
+			html = { css = true },
+		},
+		user_default_options = {
+			names = false, -- don't color words like "red" in JS/TS code
+			RRGGBBAA = true,
+			css_fn = true,
+			tailwind = false,
+		},
 	},
 }

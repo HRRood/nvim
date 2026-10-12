@@ -53,15 +53,6 @@ end
 -- Call the setup function
 setup_git_autocmds()
 
--- Status line integration (if you're using a custom statusline)
-local function git_status()
-	local gitsigns = vim.b.gitsigns_status_dict
-	if gitsigns then
-		return string.format(" +%d ~%d -%d", gitsigns.added or 0, gitsigns.changed or 0, gitsigns.removed or 0)
-	end
-	return ""
-end
-
 -- Custom command to show git summary
 vim.api.nvim_create_user_command("GitSummary", function()
 	local gitsigns = vim.b.gitsigns_status_dict
@@ -79,3 +70,16 @@ vim.api.nvim_create_user_command("GitSummary", function()
 		print("No git information available for this buffer")
 	end
 end, { desc = "Show git status summary" })
+
+-- Set the terminal title to the project (cwd) name
+local function set_project_title()
+	local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+	vim.opt.title = project_name ~= ""
+	vim.opt.titlestring = project_name
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged", "SessionLoadPost" }, {
+	desc = "Set terminal title to project name",
+	group = vim.api.nvim_create_augroup("ProjectTitleGroup", { clear = true }),
+	callback = set_project_title,
+})

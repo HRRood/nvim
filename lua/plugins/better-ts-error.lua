@@ -5,8 +5,8 @@ return {
 		config = function()
 			require("better-ts-errors").setup({
 				keymaps = {
-					toggle = "<leader>dd", -- Toggle the error explanation
-					go_to_definition = "<leader>dx", -- Jump to the error's definition
+					toggle = "<leader>te", -- Toggle the error explanation
+					go_to_definition = "<leader>tx", -- Jump to the error's definition
 				},
 			})
 		end,

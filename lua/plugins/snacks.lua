@@ -78,18 +78,41 @@ return {
 				{ section = "startup" },
 			},
 		},
-		projects = {
-			-- Specify directories to search for projects
-			paths = {
-				"~/projects",
+		-- vim.ui.input popup (replaces dressing.nvim)
+		input = { enabled = true },
+		picker = {
+			actions = {
+				-- Hand the current grep search over to grug-far to replace it
+				grug_far = function(picker)
+					local filter = picker:filter()
+					local search = vim.trim(filter.search ~= "" and filter.search or filter.pattern)
+					local cwd = picker:cwd()
+					picker:close()
+					require("grug-far").open({
+						prefills = {
+							search = search,
+							paths = cwd ~= vim.fn.getcwd() and cwd or nil,
+							flags = picker.opts.regex == false and "--fixed-strings" or nil,
+						},
+					})
+				end,
 			},
-			-- Pattern matching for project detection
-			patterns = {
-				".git",
-				"package.json",
+			sources = {
+				grep = {
+					win = {
+						input = {
+							keys = {
+								["<a-s>"] = { "grug_far", mode = { "n", "i" }, desc = "Search & replace in grug-far" },
+							},
+						},
+					},
+				},
+				projects = {
+					-- Directories to search for projects
+					dev = { "~/projects" },
+					patterns = { ".git", "package.json" },
+				},
 			},
-			-- Maximum depth to search
-			depth = 2,
 		},
 	},
 	keys = {

@@ -26,6 +26,14 @@ return {
 				end
 			end, 0)
 
+			-- nvim-treesitter main no longer enables highlighting; start it per buffer
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter-highlight", { clear = true }),
+				callback = function(event)
+					pcall(vim.treesitter.start, event.buf)
+				end,
+			})
+
 			-- textobjects config (select lookahead, move jump list)
 			require("nvim-treesitter-textobjects").setup({
 				select = { lookahead = true },

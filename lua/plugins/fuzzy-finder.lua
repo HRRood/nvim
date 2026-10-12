@@ -264,9 +264,7 @@ return {
 
 		telescope.setup({
 			defaults = {
-				-- Enhanced sorting and filtering
-				file_sorter = require("telescope.sorters").get_fuzzy_file,
-				generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
+				-- Sorting is handled by the fzf extension (loaded below)
 				file_ignore_patterns = {
 					"node_modules",
 					".git/",
@@ -497,7 +495,7 @@ return {
 		})
 
 		-- Load extensions
-		-- telescope.load_extension("fzf")
+		telescope.load_extension("fzf")
 		telescope.load_extension("file_browser")
 		telescope.load_extension("ui-select")
 		telescope.load_extension("live_grep_args")
